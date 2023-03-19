@@ -1,0 +1,7 @@
+@media (min-width: 576px) {
+    .btn-input { margin-top: 24px; }
+}
+
+@media (min-width: 1024px) {
+    .btn-input { margin-top: 26px; }
+}
