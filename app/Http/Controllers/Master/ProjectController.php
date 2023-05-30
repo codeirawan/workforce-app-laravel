@@ -3,31 +3,37 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Laratrust, DataTables, Lang;
 use App\Models\Master\Project;
+use DataTables;
+use Illuminate\Http\Request;
+use Lang;
+use Laratrust;
 
 class ProjectController extends Controller
 {
     public function index()
     {
-        if (!Laratrust::isAbleTo('view-project')) return abort(404);
+        if (!Laratrust::isAbleTo('view-master')) {
+            return abort(404);
+        }
 
         return view('master.project.index');
     }
 
     public function data()
     {
-        if (!Laratrust::isAbleTo('view-project')) return abort(404);
+        if (!Laratrust::isAbleTo('view-master')) {
+            return abort(404);
+        }
 
         $projects = Project::select('id', 'name');
 
         return DataTables::of($projects)
-            ->addColumn('action', function($project) {
+            ->addColumn('action', function ($project) {
                 $edit = '<a href="' . route('master.project.edit', $project->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Edit') . '"><i class="la la-edit"></i></a>';
                 $delete = '<a href="#" data-href="' . route('master.project.destroy', $project->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Delete') . '" data-toggle="modal" data-target="#modal-delete" data-key="' . $project->name . '"><i class="la la-trash"></i></a>';
 
-                return (Laratrust::isAbleTo('update-project') ? $edit : '') . (Laratrust::isAbleTo('delete-project') ? $delete : '');
+                return (Laratrust::isAbleTo('update-master') ? $edit : '') . (Laratrust::isAbleTo('delete-master') ? $delete : '');
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -35,14 +41,18 @@ class ProjectController extends Controller
 
     public function create()
     {
-        if (!Laratrust::isAbleTo('create-project')) return abort(404);
+        if (!Laratrust::isAbleTo('create-master')) {
+            return abort(404);
+        }
 
         return view('master.project.create');
     }
 
     public function store(Request $request)
     {
-        if (!Laratrust::isAbleTo('create-project')) return abort(404);
+        if (!Laratrust::isAbleTo('create-master')) {
+            return abort(404);
+        }
 
         $this->validate($request, [
             'nama' => ['required', 'string', 'max:255'],
@@ -58,7 +68,9 @@ class ProjectController extends Controller
 
     public function edit($id)
     {
-        if (!Laratrust::isAbleTo('update-project')) return abort(404);
+        if (!Laratrust::isAbleTo('update-master')) {
+            return abort(404);
+        }
 
         $project = Project::select('id', 'name')->findOrFail($id);
 
@@ -67,7 +79,9 @@ class ProjectController extends Controller
 
     public function update($id, Request $request)
     {
-        if (!Laratrust::isAbleTo('update-project')) return abort(404);
+        if (!Laratrust::isAbleTo('update-master')) {
+            return abort(404);
+        }
 
         $project = Project::findOrFail($id);
 
@@ -84,7 +98,9 @@ class ProjectController extends Controller
 
     public function destroy($id)
     {
-        if (!Laratrust::isAbleTo('delete-project')) return abort(404);
+        if (!Laratrust::isAbleTo('delete-master')) {
+            return abort(404);
+        }
 
         $project = Project::findOrFail($id);
         $name = $project->name;

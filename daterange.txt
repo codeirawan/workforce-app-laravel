@@ -1,0 +1,19 @@
+<div class="form-group col-sm-12">
+    <label for="date-range">Date Range</label>
+    <div class="input-group" id='kt_daterangepicker_3'>
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+        </div>
+        <input type="text" class="form-control" placeholder="Date Range">
+    </div>
+</div>
+<script>
+    $('#kt_daterangepicker_3').daterangepicker({
+        buttonClasses: ' btn',
+        applyClass: 'btn-primary',
+        cancelClass: 'btn-secondary'
+    }, function(start, end, label) {
+        $('#kt_daterangepicker_3 .form-control').val(start.format('DD/MM/YYYY') + ' - ' + end.format(
+            'DD/MM/YYYY'));
+    });
+</script>

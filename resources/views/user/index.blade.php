@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title')
     {{ __('User') }} | {{ config('app.name') }}
@@ -6,10 +6,6 @@
 
 @section('style')
     <link href="{{ asset(mix('css/datatable.css')) }}" rel="stylesheet">
-@endsection
-
-@section('subheader')
-    {{ __('User') }}
 @endsection
 
 @section('breadcrumb')
@@ -47,7 +43,6 @@
         $('#kt_table_1').DataTable({
             processing: true,
             serverSide: true,
-            responsive: true,
             language: {
                 emptyTable: "{{ __('No data available in table') }}",
                 info: "{{ __('Showing _START_ to _END_ of _TOTAL_ entries') }}",

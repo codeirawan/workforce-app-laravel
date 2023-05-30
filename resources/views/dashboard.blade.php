@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title')
     {{ __('Dashboard') }} | {{ config('app.name') }}

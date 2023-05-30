@@ -47,24 +47,6 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="form-group col-sm-6 jabatan" id="field-position" style="display: none;">
-                            <label for="jabatan">{{ __('Position') }}</label>
-                            <select id="jabatan" name="jabatan"
-                                class="form-control kt_selectpicker @error('jabatan') is-invalid @enderror"
-                                data-live-search="true" title="{{ __('Choose') }} {{ __('Position') }}">
-                                @foreach ($positions as $position)
-                                    <option value="{{ $position->id }}"
-                                        {{ old('jabatan') == $position->id ? 'selected' : '' }}>
-                                        {{ $position->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('jabatan')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
                         <div class="form-group col-sm-6 projek"id="field-project" style="display: none;">
                             <label for="projek">{{ __('Project') }}</label>
                             <select id="projek" name="projek"
@@ -78,6 +60,24 @@
                             </select>
 
                             @error('projek')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-sm-6 jabatan" id="field-skill" style="display: none;">
+                            <label for="jabatan">{{ __('Skill') }}</label>
+                            <select id="jabatan" name="jabatan"
+                                class="form-control kt_selectpicker @error('jabatan') is-invalid @enderror"
+                                data-live-search="true" title="{{ __('Choose') }} {{ __('Position') }}">
+                                @foreach ($skills as $skill)
+                                    <option value="{{ $skill->id }}"
+                                        {{ old('jabatan') == $skill->id ? 'selected' : '' }}>
+                                        {{ $skill->name }}</option>
+                                @endforeach
+                            </select>
+
+                            @error('jabatan')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -118,7 +118,7 @@
 </div>
 <script>
     const tipeSelect = document.querySelector('#tipe');
-    const durasiInput = document.querySelector('#field-position');
+    const durasiInput = document.querySelector('#field-skill');
     const nilaiInput = document.querySelector('#field-project');
 
     tipeSelect.addEventListener('change', () => {

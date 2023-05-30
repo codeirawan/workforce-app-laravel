@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Forecast;
 use App\Http\Controllers\Controller;
 use App\Imports\RawDataImport;
 use App\Models\Forecast\RawData;
+use App\Models\Master\City;
+use App\Models\Master\Project;
+use App\Models\Master\Skill;
 use DateTime;
+use DB;
 use Illuminate\Http\Request;
 use Lang;
 use Laratrust;
@@ -28,16 +32,20 @@ class RawDataController extends Controller
             return abort(404);
         }
 
-        $rawData = RawData::orderBy('date', 'asc')->get();
+        $rawData = DB::select('CALL forecast.raw_data()');
 
         return DataTables::of($rawData)
-            ->addColumn('day', function ($row) {
-                $dateTime = new DateTime($row->date);
-                return $dateTime->format('D');
-            })
             ->addColumn('date', function ($row) {
                 $dateTime = new DateTime($row->date);
-                return $dateTime->format('d M Y');
+                return $dateTime->format('D, d M Y');
+            })
+            ->addColumn('start_time', function ($row) {
+                $startTime = new DateTime($row->start_time);
+                return $startTime->format('H:i:s');
+            })
+            ->addColumn('end_time', function ($row) {
+                $startTime = new DateTime($row->end_time);
+                return $startTime->format('H:i:s');
             })
             ->addColumn('action', function ($row) {
                 $edit = '<a href="' . route('raw-data.edit', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Edit') . '"><i class="la la-edit"></i></a>';
@@ -64,64 +72,65 @@ class RawDataController extends Controller
 
     }
 
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        if (!Laratrust::isAbleTo('update-forecast')) {
+            return abort(404);
+        }
+
+        $rawData = DB::select('CALL forecast.raw_data_by_id(?)', [$id]);
+        $rawData = $rawData[0];
+
+        $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
+        $projects = Project::select('id', 'name')->orderBy('name')->get();
+        $skills = Skill::select('id', 'name')->orderBy('name')->get();
+
+        return view('forecast.raw-data.edit', compact('rawData', 'cities', 'projects', 'skills'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
-        //
+        if (!Laratrust::isAbleTo('update-forecast')) {
+            return abort(404);
+        }
+
+        $rawData = RawData::findOrFail($id);
+
+        $this->validate($request, [
+            'date' => ['required', 'date_format:Y-m-d'],
+            'start_time' => ['required', 'date_format:Y-m-d H:i:s'],
+            'end_time' => ['required', 'date_format:Y-m-d H:i:s'],
+            'volume' => ['required', 'integer'],
+            'city_id' => ['required', 'integer', 'exists:master_cities,id'],
+            'project_id' => ['required', 'integer', 'exists:master_projects,id'],
+            'skill_id' => ['required', 'integer', 'exists:master_skills,id'],
+        ]);
+
+        $rawData->date = $request->date;
+        $rawData->start_time = $request->start_time;
+        $rawData->end_time = $request->end_time;
+        $rawData->volume = $request->volume;
+        $rawData->city_id = $request->city_id;
+        $rawData->project_id = $request->project_id;
+        $rawData->skill_id = $request->skill_id;
+        $rawData->save();
+
+        $message = Lang::get('Raw Data interval ') . $rawData->start_time . ('-') . '\' ' . $rawData->end_time . '\' ' . Lang::get('successfully updated.');
+        return redirect()->route('raw-data.index')->with('status', $message);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        if (!Laratrust::isAbleTo('delete-forecast')) {
+            return abort(404);
+        }
+
+        $rawData = RawData::findOrFail($id);
+        $start = $rawData->start_time;
+        $end = $rawData->end_time;
+        $rawData->delete();
+
+        $message = Lang::get('Raw Data interval ') . ' \'' . $start . '\' ' . ('-') . ' \'' . $end . '\' ' . Lang::get('was deleted.');
+        return redirect()->route('raw-data.index')->with('status', $message);
     }
 }

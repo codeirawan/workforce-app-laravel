@@ -42,8 +42,6 @@
     </div>
 
     <div class="kt-login-v2__actions">
-        <a href="{{ route('register') }}" class="kt-link kt-link--brand">{{ __('Create Account') }}</a>
-
         <button type="submit" class="btn btn-brand btn-elevate btn-pill" id="kt_login_submit">{{ __('Sign In') }}</button>
     </div>
 @endsection

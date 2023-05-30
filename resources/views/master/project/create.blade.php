@@ -1,11 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title')
     {{ __('Create') }} {{ __('Project') }} | {{ config('app.name') }}
-@endsection
-
-@section('subheader')
-    {{ __('Create') }} {{ __('Project') }}
 @endsection
 
 @section('breadcrumb')

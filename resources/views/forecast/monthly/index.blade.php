@@ -1,7 +1,7 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('title')
-    {{ __('Monthly Forecast') }} | {{ config('app.name') }}
+    {{ __('Monthly Volume') }} | {{ config('app.name') }}
 @endsection
 
 @section('style')
@@ -9,7 +9,7 @@
 @endsection
 
 @section('subheader')
-    {{ __('Forecast') }}
+    {{ __('History') }}
 @endsection
 
 @section('breadcrumb')
@@ -22,7 +22,30 @@
         <div class="kt-portlet__body">
             <div class="kt-portlet__content">
                 @include('layouts.inc.alert')
-                <table class="table table-hover" id="kt_table_1"></table>
+                <div class="card card-custom gutter-b mb-4">
+                    <div class="bg-secondary text-dark">
+                        <div class="card-title">
+                            <h5 class="card-label mt-2 ml-4">
+                                Volume
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover" id="data"></table>
+                    </div>
+                </div>
+                {{-- <div class="card card-custom gutter-b">
+                    <div class="bg-secondary text-dark">
+                        <div class="card-title">
+                            <h5 class="card-label mt-2 ml-4">
+                                Distribution
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover" id="distribution"></table>
+                    </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -35,10 +58,9 @@
     <script src="{{ asset(mix('js/tooltip.js')) }}"></script>
     <script src="{{ asset(mix('js/form/validation.js')) }}"></script>
     <script type="text/javascript">
-        $('#kt_table_1').DataTable({
+        $('#data').DataTable({
             processing: true,
             serverSide: true,
-            responsive: true,
             language: {
                 emptyTable: "{{ __('No data available in table') }}",
                 info: "{{ __('Showing _START_ to _END_ of _TOTAL_ entries') }}",
@@ -79,7 +101,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_jan + "  -  " + row.pct_jan + "%";
+                        return row.sum_jan;
                     }
                 },
                 {
@@ -89,7 +111,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_feb + "  -  " + row.pct_feb + "%";
+                        return row.sum_feb;
                     }
                 },
                 {
@@ -99,7 +121,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_mar + "  -  " + row.pct_mar + "%";
+                        return row.sum_mar;
                     }
                 },
                 {
@@ -109,7 +131,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_apr + "  -  " + row.pct_apr + "%";
+                        return row.sum_apr;
                     }
                 },
                 {
@@ -119,7 +141,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_may + "  -  " + row.pct_may + "%";
+                        return row.sum_may;
                     }
                 },
                 {
@@ -129,7 +151,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_jun + "  -  " + row.pct_jun + "%";
+                        return row.sum_jun;
                     }
                 },
                 {
@@ -139,7 +161,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_jul + "  -  " + row.pct_jul + "%";
+                        return row.sum_jul;
                     }
                 },
                 {
@@ -149,7 +171,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_aug + "  -  " + row.pct_aug + "%";
+                        return row.sum_aug;
                     }
                 },
                 {
@@ -159,7 +181,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_sep + "  -  " + row.pct_sep + "%";
+                        return row.sum_sep;
                     }
                 },
                 {
@@ -169,7 +191,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_oct + "  -  " + row.pct_oct + "%";
+                        return row.sum_oct;
                     }
                 },
                 {
@@ -179,7 +201,7 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_nov + "  -  " + row.pct_nov + "%";
+                        return row.sum_nov;
                     }
                 },
                 {
@@ -189,24 +211,201 @@
                     searchable: false,
                     orderable: false,
                     render: function(data, type, row) {
-                        return row.sum_dec + "  -  " + row.pct_dec + "%";
+                        return row.sum_dec;
                     }
                 },
                 {
-                    title: "{{ __('Total Calls / Year') }}",
+                    title: "{{ __('Total / Year') }}",
                     data: 'sum_per_year',
                     name: 'sum_per_year',
                     defaultContent: '-',
                     class: 'text-center',
                 },
                 {
-                    title: "{{ __('Avg Calls / Month') }}",
+                    title: "{{ __('Avg / Month') }}",
                     data: 'avg_per_month',
                     name: 'avg_per_month',
                     defaultContent: '-',
                     class: 'text-center',
                 }
 
+            ],
+            drawCallback: function() {
+                $('.btn-tooltip').tooltip();
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        $('#distribution').DataTable({
+            processing: true,
+            serverSide: true,
+            language: {
+                emptyTable: "{{ __('No data available in table') }}",
+                info: "{{ __('Showing _START_ to _END_ of _TOTAL_ entries') }}",
+                infoEmpty: "{{ __('Showing 0 to 0 of 0 entries') }}",
+                infoFiltered: "({{ __('filtered from _MAX_ total entries') }})",
+                lengthMenu: "{{ __('Show _MENU_ entries') }}",
+                loadingRecords: "{{ __('Loading') }}...",
+                processing: "{{ __('Processing') }}...",
+                search: "{{ __('Search') }}",
+                zeroRecords: "{{ __('No matching records found') }}"
+            },
+            ajax: {
+                method: 'POST',
+                url: '{{ route('monthly.distribution') }}',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            },
+            columns: [{
+                    title: "No.",
+                    data: "id",
+                    render: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    },
+                    orderable: false,
+                },
+                {
+                    title: "{{ __('Year') }}",
+                    data: 'year',
+                    name: 'year',
+                    defaultContent: '-',
+                    class: 'text-center',
+                },
+                {
+                    title: "{{ __('Jan') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_jan + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Feb') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_feb + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Mar') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_mar + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Apr') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_apr + "%";
+                    }
+                },
+                {
+                    title: "{{ __('May') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_may + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Jun') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_jun + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Jul') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_jul + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Aug') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_aug + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Sep') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_sep + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Oct') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_oct + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Nov') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_nov + "%";
+                    }
+                },
+                {
+                    title: "{{ __('Dec') }}",
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row) {
+                        return row.pct_dec + "%";
+                    }
+                },
+                // {
+                //     title: "{{ __('Total / Year') }}",
+                //     data: 'sum_per_year',
+                //     name: 'sum_per_year',
+                //     defaultContent: '-',
+                //     class: 'text-center',
+                // },
+                // {
+                //     title: "{{ __('Avg / Month') }}",
+                //     data: 'avg_per_month',
+                //     name: 'avg_per_month',
+                //     defaultContent: '-',
+                //     class: 'text-center',
+                // }
             ],
             drawCallback: function() {
                 $('.btn-tooltip').tooltip();

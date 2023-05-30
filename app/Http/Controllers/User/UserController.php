@@ -4,8 +4,8 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\BulkUserImport;
-use App\Models\Master\Position;
 use App\Models\Master\Project;
+use App\Models\Master\Skill;
 use App\Role;
 use App\User;
 use DataTables;
@@ -29,9 +29,9 @@ class UserController extends Controller
 
         $projects = Project::select('id', 'name')->orderBy('name')->get();
 
-        $positions = Position::select('id', 'name')->orderBy('name')->get();
+        $skills = Skill::select('id', 'name')->orderBy('name')->get();
 
-        return view('user.index', compact('roles', 'projects', 'positions'));
+        return view('user.index', compact('roles', 'projects', 'skills'));
     }
 
     public function data()
