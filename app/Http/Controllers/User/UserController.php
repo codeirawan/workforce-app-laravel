@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Imports\BulkUserImport;
+use App\Models\Master\City;
 use App\Models\Master\Project;
 use App\Models\Master\Skill;
 use App\Role;
@@ -98,8 +99,11 @@ class UserController extends Controller
         }
 
         $roles = Role::select('id', 'display_name')->orderBy('display_name')->get();
+        $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
+        $projects = Project::select('id', 'name')->orderBy('name')->get();
+        $skills = Skill::select('id', 'name')->orderBy('name')->get();
 
-        return view('user.create', compact('roles'));
+        return view('user.create', compact('roles', 'cities', 'projects', 'skills'));
     }
 
     public function store(Request $request)
@@ -133,6 +137,11 @@ class UserController extends Controller
             $user->nik = $request->nik;
             $user->email = $email;
             $user->password = bcrypt($request->kata_sandi);
+            $user->gender = $request->kelamin;
+            $user->religion = $request->agama;
+            $user->city_id = $request->kota;
+            $user->project_id = $request->projek;
+            $user->skill_id = $request->keahlian;
             $user->save();
 
             $user->syncRoles([$request->wewenang]);

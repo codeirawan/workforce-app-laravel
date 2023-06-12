@@ -25,6 +25,9 @@ class CreateUsersTable extends Migration
             $table->char('city_id', 4)->index();
             $table->unsignedBigInteger('project_id')->index();
             $table->unsignedBigInteger('skill_id')->index();
+            $table->string('team_leader_id')->nullable();
+            $table->string('supervisor_id')->nullable();
+            $table->integer('leave_balance')->nullable();
             $table->boolean('active')->default(1);
             $table->rememberToken();
             $table->timestamps();

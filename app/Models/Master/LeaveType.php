@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models\Forecast;
+namespace App\Models\Master;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Params extends Model
+class LeaveType extends Model
 {
     use SoftDeletes;
-    
-    protected $table = 'params';
+
+    protected $table = 'master_leave_types';
 }

@@ -40,7 +40,7 @@
                     <li class="kt-menu__item kt-menu__item--submenu @if (Request::is('history*')) kt-menu__item--open kt-menu__item--here @endif"
                         aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
                         <a href="javascript:;" class="kt-menu__link kt-menu__toggle">
-                            <i class="kt-menu__link-icon fa-solid fa-calendar-week"></i>
+                            <i class="kt-menu__link-icon fa-solid fa-clock-rotate-left"></i>
                             <span class="kt-menu__link-text">{{ __('History Data') }}</span>
                             <i class="kt-menu__ver-arrow la la-angle-right"></i>
                         </a>
@@ -75,6 +75,44 @@
                         <a href="{{ route('forecast.index') }}" class="kt-menu__link">
                             <i class="kt-menu__link-icon fa-solid fa-magnifying-glass-chart"></i>
                             <span class="kt-menu__link-text">{{ __('Forecast') }}</span>
+                        </a>
+                    </li>
+                @endpermission
+
+                @permission(['view-scheduling'])
+                    <li class="kt-menu__section ">
+                        <h4 class="kt-menu__section-text">{{ __('Scheduling Management') }}</h4>
+                        <i class="kt-menu__section-icon flaticon-more-v2"></i>
+                    </li>
+
+                    <li class="kt-menu__item @if (Request::is('scheduling*')) kt-menu__item--here @endif" aria-haspopup="true">
+                        <a href="#" class="kt-menu__link">
+                            <i class="kt-menu__link-icon fa-solid fa-calendar-check"></i>
+                            <span class="kt-menu__link-text">{{ __('Scheduling (Under Construction)') }}</span>
+                        </a>
+                    </li>
+                @endpermission
+
+
+                @permission(['view-leave'])
+                    <li class="kt-menu__section ">
+                        <h4 class="kt-menu__section-text">{{ __('Leave Management') }}</h4>
+                        <i class="kt-menu__section-icon flaticon-more-v2"></i>
+                    </li>
+
+                    <li class="kt-menu__item @if (Request::is('paid-leave*')) kt-menu__item--here @endif"
+                        aria-haspopup="true">
+                        <a href="{{ route('paid-leave.index') }}" class="kt-menu__link">
+                            <i class="kt-menu__link-icon fa-solid fa-person-walking-arrow-right"></i>
+                            <span class="kt-menu__link-text">{{ __('Leave') }}</span>
+                        </a>
+                    </li>
+
+                    <li class="kt-menu__item @if (Request::is('unpaid-leave*')) kt-menu__item--here @endif"
+                        aria-haspopup="true">
+                        <a href="#" class="kt-menu__link">
+                            <i class="kt-menu__link-icon fa-solid fa-toggle-off"></i>
+                            <span class="kt-menu__link-text">{{ __('Time Off (Under Construction)') }}</span>
                         </a>
                     </li>
                 @endpermission
@@ -136,6 +174,13 @@
                                     <a href="{{ route('master.skill.index') }}" class="kt-menu__link">
                                         <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                                         <span class="kt-menu__link-text">{{ __('Skill') }}</span>
+                                    </a>
+                                </li>
+                                <li class="kt-menu__item @if (Request::is('master/leave-type*')) kt-menu__item--here @endif"
+                                    aria-haspopup="true">
+                                    <a href="{{ route('master.leave-type.index') }}" class="kt-menu__link">
+                                        <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                        <span class="kt-menu__link-text">{{ __('Leave Type') }}</span>
                                     </a>
                                 </li>
                             </ul>

@@ -31,6 +31,31 @@ Route::middleware(['auth', 'verified'])->group(
             });
         });
 
+        Route::namespace('Scheduling')->group(function () {
+            Route::middleware('permission:view-scheduling')->group(function () {
+                Route::resource('scheduling', 'SchedulingController');
+                Route::post('/scheduling/data', 'SchedulingController@data')->name('scheduling.data');
+
+            });
+        });
+
+        Route::namespace('Leave')->group(function () {
+            Route::middleware('permission:view-leave')->group(function () {
+                Route::resource('paid-leave', 'PaidLeaveController');
+                Route::post('/paid-leave/data', 'PaidLeaveController@data')->name('paid-leave.data');
+                Route::post('/paid-leave/{id}/process/{type}', 'PaidLeaveController@process')->name('paid-leave.process');
+                Route::post('/paid-leave/{id}/approve/{type}', 'PaidLeaveController@approve')->name('paid-leave.approve');
+                Route::post('/paid-leave/{id}/cancel', 'PaidLeaveController@cancel')->name('paid-leave.cancel');
+
+                Route::resource('unpaid-leave', 'UnpaidLeaveController');
+                Route::post('/unpaid-leave/data', 'UnpaidLeaveController@data')->name('unpaid-leave.data');
+                Route::post('/unpaid-leave/{id}/process/{type}', 'UnpaidLeaveController@process')->name('unpaid-leave.process');
+                Route::post('/unpaid-leave/{id}/approve/{type}', 'UnpaidLeaveController@approve')->name('unpaid-leave.approve');
+                Route::post('/unpaid-leave/{id}/cancel', 'UnpaidLeaveController@cancel')->name('unpaid-leave.cancel');
+
+            });
+        });
+
         Route::namespace('User')->group(
             function () {
                 Route::prefix('/password')->as('password.')->group(
@@ -64,6 +89,9 @@ Route::middleware(['auth', 'verified'])->group(
 
                         Route::resource('skill', 'SkillController')->except(['show']);
                         Route::post('/skill/data', 'SkillController@data')->name('skill.data');
+
+                        Route::resource('leave-type', 'LeaveTypeController')->except(['show']);
+                        Route::post('/leave-type/data', 'LeaveTypeController@data')->name('leave-type.data');
                     }
                 );
 
