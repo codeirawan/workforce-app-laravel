@@ -97,6 +97,118 @@
                                     </span>
                                 @enderror
                             </div>
+                            
+                            <div class="form-group col-sm-6">
+                                <label for="kelamin">{{ __('Gender') }}</label>
+                                <select class="form-control kt_selectpicker @error('kelamin') is-invalid @enderror"
+                                    id="kelamin" name="kelamin" required data-live-search="true"
+                                    title="{{ __('Choose') }} {{ __('Gender') }}" required>
+                                    <option value="Male" {{ old('kelamin') == 'Male' ? 'selected' : '' }}>
+                                        {{ __('Male') }}
+                                    </option>
+                                    <option value="Female" {{ old('kelamin') == 'Female' ? 'selected' : '' }}>
+                                        {{ __('Female') }}
+                                    </option>
+                                </select>
+
+                                @error('kelamin')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="agama">{{ __('Religion') }}</label>
+                                <select class="form-control kt_selectpicker @error('agama') is-invalid @enderror"
+                                    id="agama" name="agama" required data-live-search="true"
+                                    title="{{ __('Choose') }} {{ __('Religion') }}" required>
+                                    <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>
+                                        {{ __('Islam') }}
+                                    </option>
+                                    <option value="Christian" {{ old('agama') == 'Christian' ? 'selected' : '' }}>
+                                        {{ __('Christian') }}
+                                    </option>
+                                    <option value="Chatolic" {{ old('agama') == 'Chatolic' ? 'selected' : '' }}>
+                                        {{ __('Chatolic') }}
+                                    </option>
+                                    <option value="Hinduism" {{ old('agama') == 'Hinduism' ? 'selected' : '' }}>
+                                        {{ __('Hinduism') }}
+                                    </option>
+                                    <option value="Buddhism" {{ old('agama') == 'Buddhism' ? 'selected' : '' }}>
+                                        {{ __('Buddhism') }}
+                                    </option>
+                                    <option value="Confucianism" {{ old('agama') == 'Confucianism' ? 'selected' : '' }}>
+                                        {{ __('Confucianism') }}
+                                    </option>
+                                    <option value="Other" {{ old('agama') == 'Other' ? 'selected' : '' }}>
+                                        {{ __('Other') }}
+                                    </option>
+                                </select>
+
+                                @error('agama')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="kota">{{ __('Site') }}</label>
+                                <select id="kota" name="kota"
+                                    class="form-control kt_selectpicker @error('kota') is-invalid @enderror"
+                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Site') }}">
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ old('kota') == $city->id ? 'selected' : '' }}>
+                                            {{ $city->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('kota')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="projek">{{ __('Project') }}</label>
+                                <select id="projek" name="projek"
+                                    class="form-control kt_selectpicker @error('projek') is-invalid @enderror"
+                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Project') }}">
+                                    @foreach ($projects as $project)
+                                        <option value="{{ $project->id }}"
+                                            {{ old('projek') == $project->id ? 'selected' : '' }}>
+                                            {{ $project->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('projek')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6">
+                                <label for="keahlian">{{ __('Skill') }}</label>
+                                <select id="keahlian" name="keahlian"
+                                    class="form-control kt_selectpicker @error('keahlian') is-invalid @enderror"
+                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Skill') }}">
+                                    @foreach ($skills as $skill)
+                                        <option value="{{ $skill->id }}"
+                                            {{ old('keahlian') == $skill->id ? 'selected' : '' }}>
+                                            {{ $skill->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('keahlian')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
 
                             <div class="form-group col-sm-6">
                                 <label for="kata_sandi">{{ __('Password') }}</label>

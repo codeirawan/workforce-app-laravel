@@ -131,7 +131,9 @@
                     class: 'text-center',
                     render: function(data) {
                         return moment(data).format('DD MMM YYYY');
-                    }
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     title: "{{ __('End Date') }}",
@@ -141,7 +143,9 @@
                     class: 'text-center',
                     render: function(data) {
                         return moment(data).format('DD MMM YYYY');
-                    }
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     title: "{{ __('Mon') }}",
@@ -273,7 +277,9 @@
                     class: 'text-center',
                     render: function(data) {
                         return moment(data).format('DD MMM YYYY');
-                    }
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     title: "{{ __('End Date') }}",
@@ -283,7 +289,9 @@
                     class: 'text-center',
                     render: function(data) {
                         return moment(data).format('DD MMM YYYY');
-                    }
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     title: "{{ __('Mon') }}",
@@ -406,7 +414,9 @@
                     class: 'text-center',
                     render: function(data) {
                         return moment(data).format('DD MMM YYYY');
-                    }
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     title: "{{ __('End Date') }}",
@@ -416,7 +426,9 @@
                     class: 'text-center',
                     render: function(data) {
                         return moment(data).format('DD MMM YYYY');
-                    }
+                    },
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     title: "{{ __('Mon') }}",

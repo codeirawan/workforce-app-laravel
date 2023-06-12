@@ -31,5 +31,5 @@
     };
 </script>
 <script src="{{ asset(mix('js/app.js')) }}"></script>
-<script src="{{ asset('js/debug.js') }}"></script>
+{{-- <script src="{{ asset('js/debug.js') }}"></script> --}}
 @yield('script')
