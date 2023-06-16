@@ -36,7 +36,7 @@
                     <div class="kt-section__body">
                         @include('layouts.inc.alert')
                         <input type="hidden" name="by" id="by" value="{{ auth()->user()->id }}">
-                        <div class="row">   
+                        <div class="row">
                             <div class="form-group col-sm-6">
                                 <label for="request_name">{{ __('Request Name') }}</label>
                                 <input id="request_name" name="request_name" type="text"
@@ -54,7 +54,7 @@
                                 <label for="leave_type">{{ __('Leave Type') }}</label>
                                 <select id="leave_type" name="leave_type"
                                     class="form-control kt_selectpicker @error('leave_type') is-invalid @enderror"
-                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Leave Type') }}">
+                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Leave Type') }}" required>
                                     @foreach ($leaveTypes as $leaveType)
                                         <option value="{{ $leaveType->id }}"
                                             {{ old('leave_type') == $leaveType->id ? 'selected' : '' }}>
@@ -69,36 +69,21 @@
                                 @enderror
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="start_date">{{ __('Start Date') }}</label>
-                                <input type="text" class="form-control @error('start_date') is-invalid @enderror"
-                                    name="start_date" id="start_date"
-                                    placeholder="{{ __('Select') }} {{ __('Date') }}" readonly
-                                    value="{{ old('start_date') }}" required>
-
-                                @error('start_date')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group col-sm-6">
-                                <label for="end_date">{{ __('End Date') }}</label>
-                                <input type="text" class="form-control @error('end_date') is-invalid @enderror"
-                                    name="end_date" id="end_date" placeholder="{{ __('Select') }} {{ __('Date') }}"
-                                    readonly value="{{ old('end_date') }}" required>
-
-                                @error('end_date')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="form-group col-sm-12">
+                                <label for="date_range">Date Range</label>
+                                <div class="input-group" id='kt_daterangepicker_3'>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" name="date_range" id="date_range"
+                                        placeholder="{{ __('Choose') }} {{ __('Start Date') }} & {{ __('End Date') }}"
+                                        required>
+                                </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <label for="note">{{ __('Note') }}</label>
-                                <textarea id="note" name="note" class="ckeditor form-control @error('note') is-invalid @enderror">{{ old('note') }}</textarea>
+                                <textarea id="note" name="note" class="form-control @error('note') is-invalid @enderror">{{ old('note') }}</textarea>
 
                                 @error('note')
                                     <span class="invalid-feedback" role="alert">
@@ -116,39 +101,21 @@
 
 @section('script')
     <script src="{{ asset(mix('js/form/validation.js')) }}"></script>
-    <script>
-        $('#start_date').datepicker({
-            autoclose: true,
-            clearBtn: true,
-            disableTouchKeyboard: true,
-            format: "yyyy-mm-dd",
-            language: "{{ config('app.locale') }}",
-            startDate: "0d",
-            templates: {
-                leftArrow: '<i class="la la-angle-left"></i>',
-                rightArrow: '<i class="la la-angle-right"></i>'
-            },
-            todayBtn: "linked",
-            todayHighlight: true
-        });
-        $('#end_date').datepicker({
-            autoclose: true,
-            clearBtn: true,
-            disableTouchKeyboard: true,
-            format: "yyyy-mm-dd",
-            language: "{{ config('app.locale') }}",
-            startDate: "0d",
-            templates: {
-                leftArrow: '<i class="la la-angle-left"></i>',
-                rightArrow: '<i class="la la-angle-right"></i>'
-            },
-            todayBtn: "linked",
-            todayHighlight: true
-        });
-    </script>
     <script type="text/javascript">
         $('.kt_selectpicker').selectpicker({
             noneResultsText: "{{ __('No matching results for') }} {0}"
+        });
+    </script>
+    <script>
+        $('#kt_daterangepicker_3').daterangepicker({
+            buttonClasses: ' btn',
+            applyClass: 'btn-primary',
+            cancelClass: 'btn-secondary',
+            minDate: moment().startOf('day'),
+            // maxDate: moment().startOf('day').add(6, 'days'),
+        }, function(start, end, label) {
+            $('#kt_daterangepicker_3 .form-control').val(start.format('DD/MM/YYYY') + ' - ' + end.format(
+                'DD/MM/YYYY'));
         });
     </script>
 @endsection

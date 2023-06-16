@@ -9,7 +9,7 @@
 @endsection
 
 @section('breadcrumb')
-    <span class="kt-subheader__breadcrumbs-separator"></span><a href="{{ route('user.index') }}"
+    <span class="kt-subheader__breadcrumbs-separator"></span><a href="{{ route('paid-leave.index') }}"
         class="kt-subheader__breadcrumbs-link">{{ __('Leave') }}</a>
 @endsection
 
@@ -32,7 +32,12 @@
 @endsection
 
 @section('script')
-    @include('layouts.inc.modal.delete', ['object' => 'user'])
+    @include('layouts.inc.modal.delete', ['object' => 'leave'])
+    @include('leave.paid-leave.modal.submit', ['object' => 'leave'])
+    @include('leave.paid-leave.modal.process', ['object' => 'leave'])
+    @include('leave.paid-leave.modal.approve', ['object' => 'leave'])
+    @include('leave.paid-leave.modal.cancel')
+
     <script src="{{ asset(mix('js/datatable.js')) }}"></script>
     <script src="{{ asset(mix('js/tooltip.js')) }}"></script>
     <script type="text/javascript">
@@ -57,7 +62,22 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
             },
+            order: [
+                [0, 'desc']
+            ],
             columns: [{
+                    data: 'created_at',
+                    name: 'created_at',
+                    visible: false,
+                },
+                {
+                    title: "{{ __('Request id') }}",
+                    data: 'request_id',
+                    name: 'request_id',
+                    defaultContent: '-',
+                    class: 'text-center'
+                },
+                {
                     title: "{{ __('Request by') }}",
                     data: 'name',
                     name: 'name',
@@ -66,8 +86,8 @@
                 },
                 {
                     title: "Leave type",
-                    data: 'start_date',
-                    name: 'start_date',
+                    data: 'type',
+                    name: 'type',
                     defaultContent: '-',
                     class: 'text-center'
                 },
@@ -76,22 +96,51 @@
                     data: 'start_date',
                     name: 'start_date',
                     defaultContent: '-',
-                    class: 'text-center'
+                    class: 'text-center',
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            var startDate = new Date(data);
+                            var formattedDate = startDate.getDate() + ' ' + startDate.toLocaleString(
+                                'default', {
+                                    month: 'short'
+                                }) + ' ' + startDate.getFullYear();
+                            return formattedDate;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "End date",
                     data: 'end_date',
                     name: 'end_date',
                     defaultContent: '-',
-                    class: 'text-center'
+                    class: 'text-center',
+                    render: function(data, type, row) {
+                        if (type === 'display' || type === 'filter') {
+                            var endDate = new Date(data);
+                            var formattedDate = endDate.getDate() + ' ' + endDate.toLocaleString(
+                                'default', {
+                                    month: 'short'
+                                }) + ' ' + endDate.getFullYear();
+                            return formattedDate;
+                        }
+                        return data;
+                    }
                 },
-                {
-                    title: "Total day",
-                    data: 'email',
-                    name: 'email',
-                    defaultContent: '-',
-                    class: 'text-center'
-                },
+                // {
+                //     title: "Total day",
+                //     defaultContent: '-',
+                //     class: 'text-center',
+                //     render: function(data, type, row) {
+                //         if (type === 'display' || type === 'filter') {
+                //             var startDate = new Date(row.start_date);
+                //             var endDate = new Date(row.end_date);
+                //             var totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+                //             return totalDays;
+                //         }
+                //         return data;
+                //     }
+                // },
                 {
                     title: "Note",
                     data: 'note',
