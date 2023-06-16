@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('paid_leave', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('request_id')->index();
             $table->date('start_date');
             $table->date('end_date');
             $table->unsignedBigInteger('leave_type');
