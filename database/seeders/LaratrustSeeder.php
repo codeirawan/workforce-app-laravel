@@ -57,9 +57,6 @@ class LaratrustSeeder extends Seeder
                 'email' => 'dev@vads.co.id',
                 'password' => bcrypt('xpryhmpmjrgenlfm'),
                 'email_verified_at' => now(),
-                'city_id' => 3171,
-                'project_id' => 1,
-                'skill_id' => 1,
             ]);
 
             $user->attachRole($role);

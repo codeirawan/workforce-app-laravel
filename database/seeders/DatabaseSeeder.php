@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CitySeeder::class);
         $this->call(MasterSeeder::class);
         $this->call(LaratrustSeeder::class);
-        $this->call(RawDataSeeder::class);
+        // $this->call(RawDataSeeder::class);
 
     }
 }
