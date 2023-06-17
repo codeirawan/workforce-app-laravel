@@ -78,14 +78,13 @@
                                     </div>
                                     <input type="text" class="form-control" name="date_range" id="date_range"
                                         placeholder="{{ __('Choose') }} {{ __('Start Date') }} & {{ __('End Date') }}"
-                                        required
-                                        value="{{ old('date_range', $paidLeave->start_date . ' to ' . $paidLeave->end_date) }}">
+                                        required readonly value="{{ old('date_range') }}">
                                 </div>
                             </div>
 
                             <div class="form-group col-sm-12">
                                 <label for="note">{{ __('Note') }}</label>
-                                <textarea id="note" name="note" class="form-control @error('note') is-invalid @enderror">{{ old('note', $paidLeave->note) }}</textarea>
+                                <textarea id="note" name="note" class="form-control @error('note') is-invalid @enderror" required>{{ old('note', $paidLeave->note) }}</textarea>
 
                                 @error('note')
                                     <span class="invalid-feedback" role="alert">

@@ -111,9 +111,9 @@
 
                     <li class="kt-menu__item @if (Request::is('unpaid-leave*')) kt-menu__item--here @endif"
                         aria-haspopup="true">
-                        <a href="#" class="kt-menu__link">
+                        <a href="{{ route('unpaid-leave.index') }}" class="kt-menu__link">
                             <i class="kt-menu__link-icon fa-solid fa-toggle-off"></i>
-                            <span class="kt-menu__link-text">{{ __('Time Off (Under Construction)') }}</span>
+                            <span class="kt-menu__link-text">{{ __('Time Off') }}</span>
                         </a>
                     </li>
                 @endpermission

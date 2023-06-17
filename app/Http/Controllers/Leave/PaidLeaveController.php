@@ -120,7 +120,7 @@ class PaidLeaveController extends Controller
             'by' => ['required', 'integer'],
             'leave_type' => ['required', 'integer', 'exists:master_leave_types,id'],
             'date_range' => ['required'],
-            'note' => ['string'],
+            'note' => ['required', 'string', 'max:191'],
         ]);
 
         // $email = $request->email;
@@ -240,7 +240,7 @@ class PaidLeaveController extends Controller
         $this->validate($request, [
             'leave_type' => ['required', 'integer', 'exists:master_leave_types,id'],
             'date_range' => ['required'],
-            'note' => ['string', 'max:225'],
+            'note' => ['required', 'string', 'max:191'],
         ]);
         $dateRange = explode(' - ', $request->date_range);
         $start_date = date_create_from_format('d/m/Y', $dateRange[0])->format('Y-m-d');
