@@ -43,12 +43,14 @@ Route::middleware(['auth', 'verified'])->group(
             Route::middleware('permission:view-leave')->group(function () {
                 Route::resource('paid-leave', 'PaidLeaveController');
                 Route::post('/paid-leave/data', 'PaidLeaveController@data')->name('paid-leave.data');
+                Route::post('/paid-leave/{id}/submit/{type}', 'PaidLeaveController@submit')->name('paid-leave.submit');
                 Route::post('/paid-leave/{id}/process/{type}', 'PaidLeaveController@process')->name('paid-leave.process');
                 Route::post('/paid-leave/{id}/approve/{type}', 'PaidLeaveController@approve')->name('paid-leave.approve');
                 Route::post('/paid-leave/{id}/cancel', 'PaidLeaveController@cancel')->name('paid-leave.cancel');
 
                 Route::resource('unpaid-leave', 'UnpaidLeaveController');
                 Route::post('/unpaid-leave/data', 'UnpaidLeaveController@data')->name('unpaid-leave.data');
+                Route::post('/unpaid-leave/{id}/submit/{type}', 'UnpaidLeaveController@submit')->name('unpaid-leave.submit');
                 Route::post('/unpaid-leave/{id}/process/{type}', 'UnpaidLeaveController@process')->name('unpaid-leave.process');
                 Route::post('/unpaid-leave/{id}/approve/{type}', 'UnpaidLeaveController@approve')->name('unpaid-leave.approve');
                 Route::post('/unpaid-leave/{id}/cancel', 'UnpaidLeaveController@cancel')->name('unpaid-leave.cancel');
@@ -92,6 +94,12 @@ Route::middleware(['auth', 'verified'])->group(
 
                         Route::resource('leave-type', 'LeaveTypeController')->except(['show']);
                         Route::post('/leave-type/data', 'LeaveTypeController@data')->name('leave-type.data');
+
+                        Route::resource('shift', 'ShiftController')->except(['show']);
+                        Route::post('/shift/data', 'ShiftController@data')->name('shift.data');
+
+                        Route::resource('national-holiday', 'NationalHolidayController')->except(['show']);
+                        Route::post('/national-holiday/data', 'NationalHolidayController@data')->name('national-holiday.data');
                     }
                 );
 

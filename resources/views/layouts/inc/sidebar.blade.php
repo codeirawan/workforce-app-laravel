@@ -85,7 +85,8 @@
                         <i class="kt-menu__section-icon flaticon-more-v2"></i>
                     </li>
 
-                    <li class="kt-menu__item @if (Request::is('scheduling*')) kt-menu__item--here @endif" aria-haspopup="true">
+                    <li class="kt-menu__item @if (Request::is('scheduling*')) kt-menu__item--here @endif"
+                        aria-haspopup="true">
                         <a href="#" class="kt-menu__link">
                             <i class="kt-menu__link-icon fa-solid fa-calendar-check"></i>
                             <span class="kt-menu__link-text">{{ __('Scheduling (Under Construction)') }}</span>
@@ -181,6 +182,20 @@
                                     <a href="{{ route('master.leave-type.index') }}" class="kt-menu__link">
                                         <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
                                         <span class="kt-menu__link-text">{{ __('Leave Type') }}</span>
+                                    </a>
+                                </li>
+                                <li class="kt-menu__item @if (Request::is('master/shift*')) kt-menu__item--here @endif"
+                                    aria-haspopup="true">
+                                    <a href="{{ route('master.shift.index') }}" class="kt-menu__link">
+                                        <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                        <span class="kt-menu__link-text">{{ __('Shift') }}</span>
+                                    </a>
+                                </li>
+                                <li class="kt-menu__item @if (Request::is('master/national-holiday*')) kt-menu__item--here @endif"
+                                    aria-haspopup="true">
+                                    <a href="{{ route('master.national-holiday.index') }}" class="kt-menu__link">
+                                        <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                        <span class="kt-menu__link-text">{{ __('National Holiday') }}</span>
                                     </a>
                                 </li>
                             </ul>

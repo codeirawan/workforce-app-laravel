@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('master_shift', function (Blueprint $table) {
         $table->bigIncrements('id');
-        $table->string('name');
+        $table->string('name')->unique();
         $table->time('start_time');
         $table->time('end_time');
         $table->timestamps();
