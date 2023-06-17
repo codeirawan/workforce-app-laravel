@@ -113,9 +113,9 @@ class UserController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
-            'nik' => ['required', 'numeric'],
-            'email' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
+            'nik' => ['required', 'string'],
+            'email' => ['required', 'string', 'max:191'],
             'wewenang' => ['required', 'integer', 'exists:roles,id'],
             'kata_sandi' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -192,8 +192,8 @@ class UserController extends Controller
         $user = User::withoutGlobalScope('active')->findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
-            'nik' => ['required', 'numeric'],
+            'nama' => ['required', 'string', 'max:191'],
+            'nik' => ['required', 'string'],
             'wewenang' => ['required', 'integer', 'exists:roles,id'],
         ]);
 

@@ -41,8 +41,8 @@ class MyActivityController extends Controller
     {
         $this->validate($request, [
             'aktivitas' => ['required'],
-            'aktivitas.*.aktivitas' => ['required', 'string', 'max:255'],
-            'aktivitas.*.target' => ['required', 'string', 'max:255'],
+            'aktivitas.*.aktivitas' => ['required', 'string', 'max:191'],
+            'aktivitas.*.target' => ['required', 'string', 'max:191'],
         ]);
         dd($request);
         if (UserActivity::whereUserId(Auth::user()->id)->whereDate('created_at', today())->exists())

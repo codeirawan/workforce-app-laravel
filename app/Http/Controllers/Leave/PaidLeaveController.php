@@ -362,7 +362,7 @@ class PaidLeaveController extends Controller
     }
 
     $this->validate($request, [
-    'reason' => 'required|string|max:255'
+    'reason' => 'required|string|max:191'
     ]);
 
     $this->updateLeaveStatus($paidLeave, 'Canceled', $request->reason, $request);

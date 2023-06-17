@@ -55,7 +55,7 @@ class SkillController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
         ]);
 
         $skill = new Skill;
@@ -86,7 +86,7 @@ class SkillController extends Controller
         $skill = Skill::findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
         ]);
 
         $skill->name = $request->nama;

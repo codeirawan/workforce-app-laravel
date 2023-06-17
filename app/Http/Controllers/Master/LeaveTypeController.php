@@ -55,7 +55,7 @@ class LeaveTypeController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
         ]);
 
         $leaveType = new LeaveType;
@@ -86,7 +86,7 @@ class LeaveTypeController extends Controller
         $leaveType = LeaveType::findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
         ]);
 
         $leaveType->name = $request->nama;

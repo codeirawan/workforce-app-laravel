@@ -55,7 +55,7 @@ class ProjectController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
         ]);
 
         $project = new Project;
@@ -86,7 +86,7 @@ class ProjectController extends Controller
         $project = Project::findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:255'],
+            'nama' => ['required', 'string', 'max:191'],
         ]);
 
         $project->name = $request->nama;
