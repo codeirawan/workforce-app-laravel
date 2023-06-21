@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ProvinceSeeder::class);
         $this->call(CitySeeder::class);
-        $this->call(MasterSeeder::class);
         $this->call(LaratrustSeeder::class);
+        $this->call(MasterSeeder::class);
         // $this->call(RawDataSeeder::class);
 
     }
