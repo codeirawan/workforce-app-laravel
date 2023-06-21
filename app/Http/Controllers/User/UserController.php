@@ -26,13 +26,13 @@ class UserController extends Controller
             return abort(404);
         }
 
-        $roles = Role::select('id', 'display_name')->orderBy('display_name')->get();
+        $roles = Role::select('id', 'display_name')->orderBy('id')->where(
+            'name',
+            '!=',
+            'super_administrator'
+        )->get();
 
-        $projects = Project::select('id', 'name')->orderBy('name')->get();
-
-        $skills = Skill::select('id', 'name')->orderBy('name')->get();
-
-        return view('user.index', compact('roles', 'projects', 'skills'));
+        return view('user.index', compact('roles'));
     }
 
     public function data()
@@ -41,16 +41,40 @@ class UserController extends Controller
             return abort(404);
         }
 
-        $users = User::select('users.id', 'users.name', 'users.email', 'users.active', 'roles.display_name AS role', 'users.nik')
+        $users = User::select(
+            'users.id',
+            'users.nik',
+            'users.name',
+            'users.email',
+            'users.gender',
+            'users.religion',
+            'users.join_date',
+            'users.initial_leave',
+            'users.used_leave',
+            'users.team_leader_id',
+            'users.team_leader_name',
+            'users.supervisor_id',
+            'users.supervisor_name',
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'roles.display_name AS role',
+            'users.active',
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'users.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'users.project_id')
+            ->leftJoin('master_skills', 'master_skills.id', '=', 'users.skill_id')
             ->leftJoin('role_user', 'role_user.user_id', '=', 'users.id')
             ->leftJoin('roles', 'roles.id', '=', 'role_user.role_id')
-            ->withoutGlobalScope('active');
+            ->withoutGlobalScope('active')
+            ->where('roles.name', '!=', 'super_administrator')
+            ->get();
 
         return DataTables::of($users)
             ->editColumn('active', function ($user) {
                 return $user->active
-                ? '<i class="la la-check text-success font-weight-bold"></i>'
-                : '<i class="la la-times text-danger font-weight-bold"></i>';
+                    ? '<i class="la la-check text-success font-weight-bold"></i>'
+                    : '<i class="la la-times text-danger font-weight-bold"></i>';
             })
             ->addColumn('action', function ($user) {
                 $view = '<a href="' . route('user.show', $user->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('View') . '"><i class="la la-eye"></i></a>';
@@ -85,11 +109,9 @@ class UserController extends Controller
                 new BulkUserImport(),
                 $request->file('file')->store('files')
             );
-
         }
 
         return back()->with('success', 'Bulk user upload was successfully!');
-
     }
 
     public function create()
@@ -98,7 +120,11 @@ class UserController extends Controller
             return abort(404);
         }
 
-        $roles = Role::select('id', 'display_name')->orderBy('display_name')->get();
+        $roles = Role::select('id', 'display_name')->orderBy('id')->where(
+            'name',
+            '!=',
+            'super_administrator'
+        )->get();
         $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
         $projects = Project::select('id', 'name')->orderBy('name')->get();
         $skills = Skill::select('id', 'name')->orderBy('name')->get();
@@ -113,38 +139,84 @@ class UserController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:191'],
-            'nik' => ['required', 'string'],
+            'name' => ['required', 'string', 'max:191'],
+            'role' => ['required', 'integer', 'exists:roles,id'],
+            'nik' => ['required', 'string', 'max:191'],
             'email' => ['required', 'string', 'max:191'],
-            'wewenang' => ['required', 'integer', 'exists:roles,id'],
-            'kata_sandi' => ['required', 'string', 'min:8', 'confirmed'],
+            'gender' => ['nullable', 'in:Male,Female'],
+            'religion' => ['nullable', 'in:Muslim,Christian,Catholic,Hinduism,Buddhism,Confucianism,Other'],
+            'city_id' => ['nullable', 'integer', 'exists:master_cities,id'],
+            'project_id' => ['nullable', 'integer', 'exists:master_projects,id'],
+            'skill_id' => ['nullable', 'integer', 'exists:master_skills,id'],
+            'team_leader' => ['nullable', 'string', 'max:191'],
+            'supervisor' => ['nullable', 'string', 'max:191'],
+            'join_date' => ['nullable', 'date_format:Y-m-d'],
+            'initial_leave' => ['nullable', 'integer'],
+            'used_leave' => ['nullable', 'integer'],
         ]);
 
-        $email = $request->email;
-
-        if (User::withoutGlobalScope('active')->whereEmail($email)->exists()) {
+        if (User::withoutGlobalScope('active')->whereEmail($request->email)->exists()) {
             return $this->validationError(Lang::get('The email has already been taken.'));
         }
 
         if (User::withoutGlobalScope('active')->whereNik($request->nik)->exists()) {
-            return $this->validationError(Lang::get('The NIK has already been taken.'));
+            return $this->validationError(Lang::get('The user ID has already been taken.'));
+        }
+
+        if ($request->team_leader && $request->team_leader !== null) {
+            $team_leader = User::where('name', $request->team_leader)->first();
+
+            if ($team_leader === null) {
+                return $this->validationError(Lang::get("The team leader's name was not found in the records."));
+            }
+        }
+
+        if ($request->supervisor && $request->supervisor !== null) {
+            $supervisor = User::where('name', $request->supervisor)->first();
+
+            if ($supervisor === null) {
+                return $this->validationError(Lang::get("The supervisor's name was not found in the records."));
+            }
         }
 
         DB::beginTransaction();
         try {
             $user = new User;
-            $user->name = $request->nama;
+            $user->name = $request->name;
             $user->nik = $request->nik;
-            $user->email = $email;
-            $user->password = bcrypt($request->kata_sandi);
-            $user->gender = $request->kelamin;
-            $user->religion = $request->agama;
-            $user->city_id = $request->kota;
-            $user->project_id = $request->projek;
-            $user->skill_id = $request->keahlian;
+            $user->email = $request->email;
+            $user->password = bcrypt('Pa$$w0rd!');
+            $user->gender = $request->gender;
+            $user->religion = $request->religion;
+            $user->city_id = $request->city_id;
+            $user->project_id = $request->project;
+            $user->skill_id = $request->skill;
+
+            if ($request->team_leader !== null && $team_leader !== null) {
+                $user->team_leader_id = $team_leader->nik;
+                $user->team_leader_name = $request->team_leader;
+            } else {
+                $user->team_leader_id = null;
+                $user->team_leader_name = null;
+            }
+
+            if ($request->supervisor !== null && $supervisor !== null) {
+                $user->supervisor_id = $supervisor->nik;
+                $user->supervisor_name = $request->supervisor;
+            } else {
+                $user->supervisor_id = null;
+                $user->supervisor_name = null;
+            }
+
+            if ($request->join_date || $request->initial_leave || $request->used_leave) {
+                $user->join_date = $request->join_date;
+                $user->initial_leave = $request->initial_leave;
+                $user->used_leave = $request->used_leave;
+            }
+
             $user->save();
 
-            $user->syncRoles([$request->wewenang]);
+            $user->syncRoles([$request->role]);
         } catch (Exception $e) {
             DB::rollBack();
             report($e);
@@ -164,7 +236,33 @@ class UserController extends Controller
             return abort(404);
         }
 
-        $user = User::select('id', 'name', 'email', 'active', 'nik')->withoutGlobalScope('active')->findOrFail($id);
+        $user = User::select(
+            'users.id',
+            'users.nik',
+            'users.name',
+            'users.email',
+            'users.gender',
+            'users.religion',
+            'users.join_date',
+            'users.initial_leave',
+            'users.used_leave',
+            'users.team_leader_id',
+            'users.team_leader_name',
+            'users.supervisor_id',
+            'users.supervisor_name',
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'roles.display_name AS role',
+            'users.active',
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'users.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'users.project_id')
+            ->leftJoin('master_skills', 'master_skills.id', '=', 'users.skill_id')
+            ->leftJoin('role_user', 'role_user.user_id', '=', 'users.id')
+            ->leftJoin('roles', 'roles.id', '=', 'role_user.role_id')
+            ->withoutGlobalScope('active')->findOrFail($id);
+
         $role = $user->roles()->select('display_name')->first()->display_name;
 
         return view('user.show', compact('user', 'role'));
@@ -176,11 +274,47 @@ class UserController extends Controller
             return abort(404);
         }
 
-        $user = User::select('id', 'name', 'email', 'active', 'nik')->withoutGlobalScope('active')->findOrFail($id);
-        $userRole = $user->roles()->select('id')->first()->id;
-        $roles = Role::select('id', 'display_name')->orderBy('display_name')->get();
+        $user = User::select(
+            'users.id',
+            'users.nik',
+            'users.name',
+            'users.email',
+            'users.gender',
+            'users.religion',
+            'users.join_date',
+            'users.initial_leave',
+            'users.used_leave',
+            'users.team_leader_id',
+            'users.team_leader_name',
+            'users.supervisor_id',
+            'users.supervisor_name',
+            'users.city_id',
+            'users.project_id',
+            'users.skill_id',
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'roles.display_name AS role',
+            'users.active',
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'users.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'users.project_id')
+            ->leftJoin('master_skills', 'master_skills.id', '=', 'users.skill_id')
+            ->leftJoin('role_user', 'role_user.user_id', '=', 'users.id')
+            ->leftJoin('roles', 'roles.id', '=', 'role_user.role_id')
+            ->withoutGlobalScope('active')->findOrFail($id);
 
-        return view('user.edit', compact('user', 'userRole', 'roles'));
+        $userRole = $user->roles()->select('id')->first()->id;
+        $roles = Role::select('id', 'display_name')->orderBy('id')->where(
+            'name',
+            '!=',
+            'super_administrator'
+        )->get();
+        $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
+        $projects = Project::select('id', 'name')->orderBy('name')->get();
+        $skills = Skill::select('id', 'name')->orderBy('name')->get();
+
+        return view('user.edit', compact('user', 'userRole', 'roles', 'cities', 'projects', 'skills'));
     }
 
     public function update($id, Request $request)
@@ -192,23 +326,78 @@ class UserController extends Controller
         $user = User::withoutGlobalScope('active')->findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:191'],
-            'nik' => ['required', 'string'],
-            'wewenang' => ['required', 'integer', 'exists:roles,id'],
+            'name' => ['required', 'string', 'max:191'],
+            'role' => ['required', 'integer', 'exists:roles,id'],
+            'nik' => ['required', 'string', 'max:191'],
+            // 'email' => ['required', 'string', 'max:191'],
+            'gender' => ['nullable', 'in:Male,Female'],
+            'religion' => ['nullable', 'in:Muslim,Christian,Catholic,Hinduism,Buddhism,Confucianism,Other'],
+            'city_id' => ['nullable', 'integer', 'exists:master_cities,id'],
+            'project_id' => ['nullable', 'integer', 'exists:master_projects,id'],
+            'skill_id' => ['nullable', 'integer', 'exists:master_skills,id'],
+            'team_leader' => ['nullable', 'string', 'max:191'],
+            'supervisor' => ['nullable', 'string', 'max:191'],
+            'join_date' => ['nullable', 'date_format:Y-m-d'],
+            'initial_leave' => ['nullable', 'integer'],
+            'used_leave' => ['nullable', 'integer'],
         ]);
 
         if (User::withoutGlobalScope('active')->whereNik($request->nik)->where('id', '<>', $id)->exists()) {
-            return $this->validationError(Lang::get('The NIK has already been taken.'));
+            return $this->validationError(Lang::get('The user ID has already been taken.'));
+        }
+
+        if ($request->team_leader && $request->team_leader !== null) {
+            $team_leader = User::where('name', $request->team_leader)->first();
+
+            if ($team_leader === null) {
+                return $this->validationError(Lang::get("The team leader's name was not found in the records."));
+            }
+        }
+
+        if ($request->supervisor && $request->supervisor !== null) {
+            $supervisor = User::where('name', $request->supervisor)->first();
+
+            if ($supervisor === null) {
+                return $this->validationError(Lang::get("The supervisor's name was not found in the records."));
+            }
         }
 
         DB::beginTransaction();
         try {
-            $user->name = $request->nama;
+            $user->name = $request->name;
             $user->nik = $request->nik;
+            $user->gender = $request->gender;
+            $user->religion = $request->religion;
+            $user->city_id = $request->city;
+            $user->project_id = $request->project;
+            $user->skill_id = $request->skill;
+
+            if ($request->team_leader !== null && $team_leader !== null) {
+                $user->team_leader_id = $team_leader->nik;
+                $user->team_leader_name = $request->team_leader;
+            } else {
+                $user->team_leader_id = null;
+                $user->team_leader_name = null;
+            }
+
+            if ($request->supervisor !== null && $supervisor !== null) {
+                $user->supervisor_id = $supervisor->nik;
+                $user->supervisor_name = $request->supervisor;
+            } else {
+                $user->supervisor_id = null;
+                $user->supervisor_name = null;
+            }
+
+            if ($request->join_date || $request->initial_leave || $request->used_leave) {
+                $user->join_date = $request->join_date;
+                $user->initial_leave = $request->initial_leave;
+                $user->used_leave = $request->used_leave;
+            }
+
             $user->active = $request->aktif ? 1 : 0;
             $user->save();
 
-            $user->syncRoles([$request->wewenang]);
+            $user->syncRoles([$request->role]);
         } catch (Exception $e) {
             DB::rollBack();
             report($e);

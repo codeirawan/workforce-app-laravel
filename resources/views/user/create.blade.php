@@ -38,12 +38,12 @@
 
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="nama">{{ __('Name') }}</label>
-                                <input id="nama" name="nama" type="text"
-                                    class="form-control @error('nama') is-invalid @enderror" required
-                                    value="{{ old('nama') }}">
+                                <label for="name">{{ __('Name') }}</label>
+                                <input id="name" name="name" type="text"
+                                    class="form-control @error('name') is-invalid @enderror" required
+                                    value="{{ old('name') }}" autocomplete="off" placeholder="{{ __('User Name') }}">
 
-                                @error('nama')
+                                @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -51,18 +51,18 @@
                             </div>
 
                             <div class="form-group col-sm-6">
-                                <label for="wewenang">{{ __('Role') }}</label>
-                                <select id="wewenang" name="wewenang"
-                                    class="form-control kt_selectpicker @error('wewenang') is-invalid @enderror" required
+                                <label for="role">{{ __('Role') }}</label>
+                                <select id="role" name="role"
+                                    class="form-control kt_selectpicker @error('role') is-invalid @enderror" required
                                     data-live-search="true" title="{{ __('Choose') }} {{ __('Role') }}">
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->id }}"
-                                            {{ old('wewenang') == $role->id ? 'selected' : '' }}>{{ $role->display_name }}
+                                            {{ old('role') == $role->id ? 'selected' : '' }}>{{ $role->display_name }}
                                         </option>
                                     @endforeach
                                 </select>
 
-                                @error('wewenang')
+                                @error('role')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -70,10 +70,10 @@
                             </div>
 
                             <div class="form-group col-sm-6">
-                                <label for="nik">NIK</label>
+                                <label for="nik">ID</label>
                                 <input id="nik" name="nik" type="text"
                                     class="form-control @error('nik') is-invalid @enderror" required
-                                    value="{{ old('nik') }}">
+                                    value="{{ old('nik') }}" autocomplete="off" placeholder="{{ __('User ID') }}">
 
                                 @error('nik')
                                     <span class="invalid-feedback" role="alert">
@@ -86,9 +86,10 @@
                                 <label for="email">Email</label>
 
                                 <div class="input-group">
-                                    <input id="email" name="email" type="text"
+                                    <input id="email" name="email" type="email"
                                         class="form-control @error('email') is-invalid @enderror" required
-                                        value="{{ old('email') }}">
+                                        value="{{ old('email') }}" autocomplete="off"
+                                        placeholder="{{ __('User Email') }}">
                                 </div>
 
                                 @error('email')
@@ -97,21 +98,21 @@
                                     </span>
                                 @enderror
                             </div>
-                            
+
                             <div class="form-group col-sm-6">
-                                <label for="kelamin">{{ __('Gender') }}</label>
-                                <select class="form-control kt_selectpicker @error('kelamin') is-invalid @enderror"
-                                    id="kelamin" name="kelamin" required data-live-search="true"
+                                <label for="gender">{{ __('Gender') }}</label>
+                                <select class="form-control kt_selectpicker @error('gender') is-invalid @enderror"
+                                    id="gender" name="gender" required data-live-search="true"
                                     title="{{ __('Choose') }} {{ __('Gender') }}" required>
-                                    <option value="Male" {{ old('kelamin') == 'Male' ? 'selected' : '' }}>
+                                    <option value="Male" {{ old('gender') == 'Male' ? 'selected' : '' }}>
                                         {{ __('Male') }}
                                     </option>
-                                    <option value="Female" {{ old('kelamin') == 'Female' ? 'selected' : '' }}>
+                                    <option value="Female" {{ old('gender') == 'Female' ? 'selected' : '' }}>
                                         {{ __('Female') }}
                                     </option>
                                 </select>
 
-                                @error('kelamin')
+                                @error('gender')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -119,113 +120,165 @@
                             </div>
 
                             <div class="form-group col-sm-6">
-                                <label for="agama">{{ __('Religion') }}</label>
-                                <select class="form-control kt_selectpicker @error('agama') is-invalid @enderror"
-                                    id="agama" name="agama" required data-live-search="true"
+                                <label for="religion">{{ __('Religion') }}</label>
+                                <select class="form-control kt_selectpicker @error('religion') is-invalid @enderror"
+                                    id="religion" name="religion" required data-live-search="true"
                                     title="{{ __('Choose') }} {{ __('Religion') }}" required>
-                                    <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>
-                                        {{ __('Islam') }}
+                                    <option value="Muslim" {{ old('religion') == 'Muslim' ? 'selected' : '' }}>
+                                        {{ __('Muslim') }}
                                     </option>
-                                    <option value="Christian" {{ old('agama') == 'Christian' ? 'selected' : '' }}>
+                                    <option value="Christian" {{ old('religion') == 'Christian' ? 'selected' : '' }}>
                                         {{ __('Christian') }}
                                     </option>
-                                    <option value="Chatolic" {{ old('agama') == 'Chatolic' ? 'selected' : '' }}>
+                                    <option value="Chatolic" {{ old('religion') == 'Chatolic' ? 'selected' : '' }}>
                                         {{ __('Chatolic') }}
                                     </option>
-                                    <option value="Hinduism" {{ old('agama') == 'Hinduism' ? 'selected' : '' }}>
+                                    <option value="Hinduism" {{ old('religion') == 'Hinduism' ? 'selected' : '' }}>
                                         {{ __('Hinduism') }}
                                     </option>
-                                    <option value="Buddhism" {{ old('agama') == 'Buddhism' ? 'selected' : '' }}>
+                                    <option value="Buddhism" {{ old('religion') == 'Buddhism' ? 'selected' : '' }}>
                                         {{ __('Buddhism') }}
                                     </option>
-                                    <option value="Confucianism" {{ old('agama') == 'Confucianism' ? 'selected' : '' }}>
+                                    <option value="Confucianism" {{ old('religion') == 'Confucianism' ? 'selected' : '' }}>
                                         {{ __('Confucianism') }}
                                     </option>
-                                    <option value="Other" {{ old('agama') == 'Other' ? 'selected' : '' }}>
+                                    <option value="Other" {{ old('religion') == 'Other' ? 'selected' : '' }}>
                                         {{ __('Other') }}
                                     </option>
                                 </select>
 
-                                @error('agama')
+                                @error('religion')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="kota">{{ __('Site') }}</label>
-                                <select id="kota" name="kota"
-                                    class="form-control kt_selectpicker @error('kota') is-invalid @enderror"
+                            <div class="form-group col-sm-6 site">
+                                <label for="city_id">{{ __('Site') }}</label>
+                                <select id="city_id" name="city_id"
+                                    class="form-control kt_selectpicker @error('city_id') is-invalid @enderror"
                                     data-live-search="true" title="{{ __('Choose') }} {{ __('Site') }}">
                                     @foreach ($cities as $city)
                                         <option value="{{ $city->id }}"
-                                            {{ old('kota') == $city->id ? 'selected' : '' }}>
+                                            {{ old('city_id') == $city->id ? 'selected' : '' }}>
                                             {{ $city->name }}</option>
                                     @endforeach
                                 </select>
 
-                                @error('kota')
+                                @error('city_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="projek">{{ __('Project') }}</label>
-                                <select id="projek" name="projek"
-                                    class="form-control kt_selectpicker @error('projek') is-invalid @enderror"
+                            <div class="form-group col-sm-6 project">
+                                <label for="project">{{ __('Project') }}</label>
+                                <select id="project" name="project"
+                                    class="form-control kt_selectpicker @error('project') is-invalid @enderror"
                                     data-live-search="true" title="{{ __('Choose') }} {{ __('Project') }}">
                                     @foreach ($projects as $project)
                                         <option value="{{ $project->id }}"
-                                            {{ old('projek') == $project->id ? 'selected' : '' }}>
+                                            {{ old('project') == $project->id ? 'selected' : '' }}>
                                             {{ $project->name }}</option>
                                     @endforeach
                                 </select>
 
-                                @error('projek')
+                                @error('project')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="keahlian">{{ __('Skill') }}</label>
-                                <select id="keahlian" name="keahlian"
-                                    class="form-control kt_selectpicker @error('keahlian') is-invalid @enderror"
+                            <div class="form-group col-sm-6 skill">
+                                <label for="skill">{{ __('Skill') }}</label>
+                                <select id="skill" name="skill"
+                                    class="form-control kt_selectpicker @error('skill') is-invalid @enderror"
                                     data-live-search="true" title="{{ __('Choose') }} {{ __('Skill') }}">
                                     @foreach ($skills as $skill)
                                         <option value="{{ $skill->id }}"
-                                            {{ old('keahlian') == $skill->id ? 'selected' : '' }}>
+                                            {{ old('skill') == $skill->id ? 'selected' : '' }}>
                                             {{ $skill->name }}</option>
                                     @endforeach
                                 </select>
 
-                                @error('keahlian')
+                                @error('skill')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="kata_sandi">{{ __('Password') }}</label>
-                                <input id="kata_sandi" name="kata_sandi" type="password"
-                                    class="form-control @error('kata_sandi') is-invalid @enderror" required minlength="8">
+                            <div class="form-group col-sm-6 team_leader">
+                                <label for="team_leader">{{ __('Team Leader') }}</label>
+                                <input id="team_leader" name="team_leader" type="text"
+                                    class="form-control @error('team_leader') is-invalid @enderror"
+                                    value="{{ old('team_leader') }}" autocomplete="off"
+                                    placeholder="{{ __('Team Leader Name') }}">
 
-                                @error('kata_sandi')
+                                @error('team_leader')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="kata_sandi_confirmation">{{ __('Confirm Password') }}</label>
-                                <input id="kata_sandi_confirmation" name="kata_sandi_confirmation" type="password"
-                                    class="form-control" required minlength="8">
+                            <div class="form-group col-sm-6 supervisor">
+                                <label for="supervisor">{{ __('Supervisor') }}</label>
+                                <input id="supervisor" name="supervisor" type="text"
+                                    class="form-control @error('supervisor') is-invalid @enderror"
+                                    value="{{ old('supervisor') }}" autocomplete="off"
+                                    placeholder="{{ __('Supervisor Name') }}">
+
+                                @error('supervisor')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6 join_date">
+                                <label for="join_date">{{ __('Join Date') }}</label>
+                                <input id="join_date" name="join_date" type="text"
+                                    class="form-control @error('join_date') is-invalid @enderror"
+                                    value="{{ old('join_date') }}" autocomplete="off"
+                                    placeholder="{{ __('Choose Join Date') }}" readonly>
+
+                                @error('join_date')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6 initial_leave">
+                                <label for="initial_leave">{{ __('Initial Leave') }}</label>
+                                <input id="initial_leave" name="initial_leave" type="number" min="0"
+                                    class="form-control @error('initial_leave') is-invalid @enderror"
+                                    value="{{ old('initial_leave') }}" autocomplete="off"
+                                    placeholder="{{ __('Initial Leave') }}">
+
+                                @error('initial_leave')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-6 used_leave">
+                                <label for="used_leave">{{ __('Used Leave') }}</label>
+                                <input id="used_leave" name="used_leave" type="number" min="0"
+                                    class="form-control @error('used_leave') is-invalid @enderror"
+                                    value="{{ old('used_leave') }}" autocomplete="off"
+                                    placeholder="{{ __('Used Leave') }}">
+
+                                @error('used_leave')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -240,6 +293,72 @@
     <script type="text/javascript">
         $('.kt_selectpicker').selectpicker({
             noneResultsText: "{{ __('No matching results for') }} {0}"
+        });
+    </script>
+    <script>
+        $('#join_date').datepicker({
+            autoclose: true,
+            clearBtn: true,
+            disableTouchKeyboard: true,
+            format: "yyyy-mm-dd",
+            language: "{{ config('app.locale') }}",
+            templates: {
+                leftArrow: '<i class="la la-angle-left"></i>',
+                rightArrow: '<i class="la la-angle-right"></i>'
+            },
+            todayBtn: "linked",
+            todayHighlight: true
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.site').hide();
+            $('.project').hide();
+            $('.skill').hide();
+            $('.team_leader').hide();
+            $('.supervisor').hide();
+            $('.join_date').hide();
+            $('.initial_leave').hide();
+            $('.used_leave').hide();
+        });
+        $(document).on('change', '#role', function() {
+            if ($(this).val() == "5") {
+                $('.site').show();
+                $('.project').show();
+                $('.skill').show();
+                $('.team_leader').show();
+                $('.supervisor').show();
+                $('.join_date').show();
+                $('.initial_leave').show();
+                $('.used_leave').show();
+            } else if ($(this).val() == "4") {
+                $('.site').show();
+                $('.project').show();
+                $('.skill').hide();
+                $('.team_leader').hide();
+                $('.supervisor').show();
+                $('.join_date').show();
+                $('.initial_leave').show();
+                $('.used_leave').show();
+            } else if ($(this).val() == "3") {
+                $('.site').show();
+                $('.project').show();
+                $('.skill').hide();
+                $('.team_leader').hide();
+                $('.supervisor').hide();
+                $('.join_date').show();
+                $('.initial_leave').show();
+                $('.used_leave').show();
+            } else {
+                $('.site').hide();
+                $('.project').hide();
+                $('.skill').hide();
+                $('.team_leader').hide();
+                $('.supervisor').hide();
+                $('.join_date').hide();
+                $('.initial_leave').hide();
+                $('.used_leave').hide();
+            }
         });
     </script>
 @endsection

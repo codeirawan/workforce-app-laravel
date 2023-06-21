@@ -26,7 +26,9 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('project_id')->nullable()->index();
             $table->unsignedBigInteger('skill_id')->nullable()->index();
             $table->string('team_leader_id')->nullable();
+            $table->string('team_leader_name')->nullable();
             $table->string('supervisor_id')->nullable();
+            $table->string('supervisor_name')->nullable();
             $table->date('join_date')->nullable();
             $table->integer('initial_leave')->nullable();
             $table->integer('used_leave')->nullable();

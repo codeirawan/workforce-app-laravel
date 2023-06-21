@@ -39,39 +39,24 @@
 
                         <div class="row">
                             <div class="form-group col-sm-6">
-                                <label for="nama">{{ __('Name') }}</label>
-                                <input id="nama" name="nama" type="text"
-                                    class="form-control @error('nama') is-invalid @enderror" required
-                                    value="{{ old('nama', $user->name) }}">
+                                <label for="name">{{ __('Name') }}</label>
+                                <input id="name" name="name" type="text"
+                                    class="form-control @error('name') is-invalid @enderror" required
+                                    value="{{ old('name', $user->name) }}">
 
-                                @error('nama')
+                                @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-
                             <div class="form-group col-sm-6">
-                                <label for="wewenang">{{ __('Role') }}</label>
-                                <select id="wewenang" name="wewenang"
-                                    class="form-control kt_selectpicker @error('wewenang') is-invalid @enderror" required
-                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Role') }}">
-                                    @foreach ($roles as $role)
-                                        <option value="{{ $role->id }}"
-                                            {{ old('wewenang', $userRole) == $role->id ? 'selected' : '' }}>
-                                            {{ $role->display_name }}</option>
-                                    @endforeach
-                                </select>
-
-                                @error('wewenang')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <label>Email</label>
+                                <input type="email" class="form-control" value="{{ $user->email }}" disabled>
                             </div>
 
-                            <div class="form-group col-sm-6">
-                                <label for="nik">NIK</label>
+                            <div class="form-group col-sm-4">
+                                <label for="nik">ID</label>
                                 <input id="nik" name="nik" type="text"
                                     class="form-control @error('nik') is-invalid @enderror" required
                                     value="{{ old('nik', $user->nik) }}">
@@ -82,11 +67,201 @@
                                     </span>
                                 @enderror
                             </div>
+                            <div class="form-group col-sm-4">
+                                <label for="gender">{{ __('Gender') }}</label>
+                                <select class="form-control kt_selectpicker @error('gender') is-invalid @enderror"
+                                    id="gender" name="gender" data-live-search="true"
+                                    title="{{ __('Choose') }} {{ __('Gender') }}">
+                                    <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>
+                                        {{ __('Male') }}
+                                    </option>
+                                    <option value="Female"
+                                        {{ old('gender', $user->gender) == 'Female' ? 'selected' : '' }}>
+                                        {{ __('Female') }}
+                                    </option>
+                                </select>
 
-                            <div class="form-group col-sm-6">
-                                <label>Email</label>
-                                <input type="email" class="form-control" value="{{ $user->email }}" disabled>
+                                @error('gender')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
+                            <div class="form-group col-sm-4">
+                                <label for="religion">{{ __('Religion') }}</label>
+                                <select class="form-control kt_selectpicker @error('religion') is-invalid @enderror"
+                                    id="religion" name="religion" data-live-search="true"
+                                    title="{{ __('Choose') }} {{ __('Religion') }}">
+                                    <option value="Muslim"
+                                        {{ old('religion', $user->religion) == 'Muslim' ? 'selected' : '' }}>
+                                        {{ __('Muslim') }}
+                                    </option>
+                                    <option value="Christian"
+                                        {{ old('religion', $user->religion) == 'Christian' ? 'selected' : '' }}>
+                                        {{ __('Christian') }}
+                                    </option>
+                                    <option value="Catholic"
+                                        {{ old('religion', $user->religion) == 'Catholic' ? 'selected' : '' }}>
+                                        {{ __('Catholic') }}
+                                    </option>
+                                    <option value="Hinduism"
+                                        {{ old('religion', $user->religion) == 'Hinduism' ? 'selected' : '' }}>
+                                        {{ __('Hinduism') }}
+                                    </option>
+                                    <option value="Buddhism"
+                                        {{ old('religion', $user->religion) == 'Buddhism' ? 'selected' : '' }}>
+                                        {{ __('Buddhism') }}
+                                    </option>
+                                    <option value="Confucianism"
+                                        {{ old('religion', $user->religion) == 'Confucianism' ? 'selected' : '' }}>
+                                        {{ __('Confucianism') }}
+                                    </option>
+                                    <option value="Other"
+                                        {{ old('religion', $user->religion) == 'Other' ? 'selected' : '' }}>
+                                        {{ __('Other') }}
+                                    </option>
+                                </select>
+
+                                @error('religion')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="role">{{ __('Role') }}</label>
+                                <select id="role" name="role"
+                                    class="form-control kt_selectpicker @error('role') is-invalid @enderror"
+                                    data-live-search="true" title="{{ __('Choose') }} {{ __('Role') }}">
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->id }}"
+                                            {{ old('role', $userRole) == $role->id ? 'selected' : '' }}>
+                                            {{ $role->display_name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('role')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="team_leader">{{ __('Team Leader') }}</label>
+                                <input id="team_leader" name="team_leader" type="text"
+                                    class="form-control @error('team_leader') is-invalid @enderror"
+                                    value="{{ old('team_leader', $user->team_leader_name) }}">
+
+                                @error('team_leader')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="supervisor">{{ __('Supervisor') }}</label>
+                                <input id="supervisor" name="supervisor" type="text"
+                                    class="form-control @error('supervisor') is-invalid @enderror"
+                                    value="{{ old('supervisor', $user->supervisor_name) }}">
+
+                                @error('supervisor')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="city">{{ __('Site') }}</label>
+                                <select id="city" name="city"
+                                    class="form-control kt_selectpicker @error('city') is-invalid @enderror"
+                                    data-live-search="true">
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ old('city', $user->city_id) == $city->id ? 'selected' : '' }}>
+                                            {{ $city->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('city')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="project">{{ __('Project') }}</label>
+                                <select id="project" name="project"
+                                    class="form-control kt_selectpicker @error('project') is-invalid @enderror"
+                                    data-live-search="true">
+                                    @foreach ($projects as $project)
+                                        <option value="{{ $project->id }}"
+                                            {{ old('project', $user->project_id) == $project->id ? 'selected' : '' }}>
+                                            {{ $project->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('project')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="skill">{{ __('Skill') }}</label>
+                                <select id="skill" name="skill"
+                                    class="form-control kt_selectpicker @error('skill') is-invalid @enderror"
+                                    data-live-search="true">
+                                    @foreach ($skills as $skill)
+                                        <option value="{{ $skill->id }}"
+                                            {{ old('skill', $user->skill_id) == $skill->id ? 'selected' : '' }}>
+                                            {{ $skill->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('skill')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="join_date">{{ __('Join Date') }}</label>
+                                <input id="join_date" name="join_date" type="text"
+                                    class="form-control @error('join_date') is-invalid @enderror" required
+                                    value="{{ old('join_date', $user->join_date) }}">
+
+                                @error('join_date')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="initial_leave">{{ __('Initial Leave') }}</label>
+                                <input id="initial_leave" name="initial_leave" type="number" min="0"
+                                    class="form-control @error('initial_leave') is-invalid @enderror" required
+                                    value="{{ old('initial_leave', $user->initial_leave) }}">
+
+                                @error('initial_leave')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="used_leave">{{ __('Used Leave') }}</label>
+                                <input id="used_leave" name="used_leave" type="number" min="0"
+                                    class="form-control @error('used_leave') is-invalid @enderror" required
+                                    value="{{ old('used_leave', $user->used_leave) }}">
+
+                                @error('used_leave')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+
                         </div>
 
                         <div class="form-group">
@@ -111,6 +286,21 @@
     <script type="text/javascript">
         $('.kt_selectpicker').selectpicker({
             noneResultsText: "{{ __('No matching results for') }} {0}"
+        });
+    </script>
+    <script>
+        $('#join_date').datepicker({
+            autoclose: true,
+            clearBtn: true,
+            disableTouchKeyboard: true,
+            format: "yyyy-mm-dd",
+            language: "{{ config('app.locale') }}",
+            templates: {
+                leftArrow: '<i class="la la-angle-left"></i>',
+                rightArrow: '<i class="la la-angle-right"></i>'
+            },
+            todayBtn: "linked",
+            todayHighlight: true
         });
     </script>
 @endsection

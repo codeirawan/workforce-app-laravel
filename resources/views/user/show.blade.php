@@ -46,20 +46,74 @@
                             <label>{{ __('Name') }}</label>
                             <input type="text" class="form-control" disabled value="{{ $user->name }}">
                         </div>
-
-                        <div class="form-group col-sm-6">
-                            <label>{{ __('Role') }}</label>
-                            <input type="text" class="form-control" disabled value="{{ $role }}">
-                        </div>
-
-                        <div class="form-group col-sm-6">
-                            <label>NIK</label>
-                            <input type="text" class="form-control" disabled value="{{ $user->nik }}">
-                        </div>
-
                         <div class="form-group col-sm-6">
                             <label>Email</label>
                             <input type="email" class="form-control" disabled value="{{ $user->email }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>ID</label>
+                            <input type="text" class="form-control" disabled value="{{ $user->nik }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Gender') }}</label>
+                            <input type="text" class="form-control" disabled value="{{ $user->gender }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Religion') }}</label>
+                            <input type="text" class="form-control" disabled value="{{ $user->religion }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Role') }}</label>
+                            <input type="text" class="form-control" disabled value="{{ $role }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Team Leader') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->team_leader_name ? $user->team_leader_name : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Supervisor') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->supervisor_name ? $user->supervisor_name : '-' }}">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Site') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->site ? $user->site : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Project') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->project ? $user->project : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>{{ __('Skill') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->skill ? $user->skill : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label>{{ __('Join Date') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->join_date ? $user->join_date : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label>{{ __('Initial Leave') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->initial_leave ? $user->initial_leave : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label>{{ __('Used Leave') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->used_leave ? $user->used_leave : '-' }}">
+                        </div>
+                        <div class="form-group col-sm-3">
+                            <label>{{ __('Remaining Leave') }}</label>
+                            <input type="text" class="form-control" disabled
+                                value="{{ $user->initial_leave ? $user->initial_leave - $user->used_leave : '-' }}">
                         </div>
                     </div>
 

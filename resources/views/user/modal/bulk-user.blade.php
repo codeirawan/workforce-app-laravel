@@ -12,72 +12,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label for="tipe">{{ __('User Type') }}</label>
-                            <select class="form-control kt_selectpicker @error('tipe') is-invalid @enderror"
-                                id="tipe" name="tipe" required data-live-search="true"
-                                title="{{ __('Choose') }} {{ __('User Type') }}" required>
-                                <option value="Corporate" {{ old('tipe') == 'Corporate' ? 'selected' : '' }}>
-                                    {{ __('Corporate') }}</option>
-                                <option value="Project" {{ old('tipe') == 'Project' ? 'selected' : '' }}>
-                                    {{ __('Project') }}</option>
-                            </select>
-
-                            @error('tipe')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label for="wewenang">{{ __('Role') }}</label>
-                            <select id="wewenang" name="wewenang"
-                                class="form-control kt_selectpicker @error('wewenang') is-invalid @enderror" required
+                        <div class="form-group col-sm-12">
+                            <label for="role">{{ __('Role') }}</label>
+                            <select id="role" name="role"
+                                class="form-control kt_selectpicker @error('role') is-invalid @enderror" required
                                 data-live-search="true" title="{{ __('Choose') }} {{ __('Role') }}">
                                 @foreach ($roles as $role)
                                     <option value="{{ $role->id }}"
-                                        {{ old('wewenang') == $role->id ? 'selected' : '' }}>{{ $role->display_name }}
+                                        {{ old('role') == $role->id ? 'selected' : '' }}>{{ $role->display_name }}
                                     </option>
                                 @endforeach
                             </select>
 
-                            @error('wewenang')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-sm-6 projek"id="field-project" style="display: none;">
-                            <label for="projek">{{ __('Project') }}</label>
-                            <select id="projek" name="projek"
-                                class="form-control kt_selectpicker @error('projek') is-invalid @enderror"
-                                data-live-search="true" title="{{ __('Choose') }} {{ __('Project') }}">
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}"
-                                        {{ old('projek') == $project->id ? 'selected' : '' }}>
-                                        {{ $project->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('projek')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-sm-6 jabatan" id="field-skill" style="display: none;">
-                            <label for="jabatan">{{ __('Skill') }}</label>
-                            <select id="jabatan" name="jabatan"
-                                class="form-control kt_selectpicker @error('jabatan') is-invalid @enderror"
-                                data-live-search="true" title="{{ __('Choose') }} {{ __('Position') }}">
-                                @foreach ($skills as $skill)
-                                    <option value="{{ $skill->id }}"
-                                        {{ old('jabatan') == $skill->id ? 'selected' : '' }}>
-                                        {{ $skill->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('jabatan')
+                            @error('role')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -99,10 +46,22 @@
                                 <label class="custom-file-label" for="file">{{ __('Choose file') }}</label>
                             </div>
                             <span>
-                                {{ __('Download bulk user templete') }} : <a
-                                    href="{{ url('/') }}/template/bulk-user-template.xlsx">
-                                    <h5 class="text-success">{{ __('here') }}!! <i class="fa fa-file-excel"></i>
-                                    </h5>
+                                {{ __('Download bulk user templete') }} :
+                                <br>
+                                <a href="{{ url('/') }}/template/bulk_user_admin.xlsx">bulk_user_admin
+                                    <i class="fa fa-file-excel text-success"></i>
+                                </a>
+                                <br>
+                                <a href="{{ url('/') }}/template/bulk_user_spv.xlsx">bulk_user_spv
+                                    <i class="fa fa-file-excel text-success"></i>
+                                </a>
+                                <br>
+                                <a href="{{ url('/') }}/template/bulk_user_tl.xlsx">bulk_user_tl
+                                    <i class="fa fa-file-excel text-success"></i>
+                                </a>
+                                <br>
+                                <a href="{{ url('/') }}/template/bulk_user_agent.xlsx">bulk_user_agent
+                                    <i class="fa fa-file-excel text-success"></i>
                                 </a>
                             </span>
                         </div>
@@ -116,21 +75,6 @@
         </div>
     </div>
 </div>
-<script>
-    const tipeSelect = document.querySelector('#tipe');
-    const durasiInput = document.querySelector('#field-skill');
-    const nilaiInput = document.querySelector('#field-project');
-
-    tipeSelect.addEventListener('change', () => {
-        if (tipeSelect.value === 'Corporate') {
-            durasiInput.style.display = 'none';
-            nilaiInput.style.display = 'none';
-        } else {
-            durasiInput.style.display = 'block';
-            nilaiInput.style.display = 'block';
-        }
-    });
-</script>
 <script src="{{ asset(mix('js/form/validation.js')) }}"></script>
 <script type="text/javascript">
     $('.kt_selectpicker').selectpicker({

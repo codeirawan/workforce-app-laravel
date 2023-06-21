@@ -28,7 +28,9 @@
                     </a>
                 @endif
 
-                <table class="table" id="kt_table_1"></table>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered" id="kt_table_1"></table>
+                </div>
             </div>
         </div>
     </div>
@@ -62,23 +64,37 @@
                 }
             },
             columns: [{
-                    title: "{{ __('Name') }}",
-                    data: 'name',
-                    name: 'name',
-                    defaultContent: '-',
-                    class: 'text-center'
-                },
-                {
-                    title: "NIK",
+                    title: "ID",
                     data: 'nik',
                     name: 'nik',
                     defaultContent: '-',
-                    class: 'text-center'
+                    class: 'text-center',
+                    visible: false
+                },
+                {
+                    title: "{{ __('Name') }}",
+                    data: 'name',
+                    name: 'name',
+                    defaultContent: '-'
                 },
                 {
                     title: "Email",
                     data: 'email',
                     name: 'email',
+                    defaultContent: '-',
+                    visible: false
+                },
+                {
+                    title: "Gender",
+                    data: 'gender',
+                    name: 'gender',
+                    defaultContent: '-',
+                    class: 'text-center'
+                },
+                {
+                    title: "Religion",
+                    data: 'religion',
+                    name: 'religion',
                     defaultContent: '-',
                     class: 'text-center'
                 },
@@ -87,8 +103,75 @@
                     data: 'role',
                     name: 'role',
                     defaultContent: '-',
+                    class: 'text-center'
+                },
+                {
+                    title: "TL",
+                    data: 'team_leader_name',
+                    name: 'team_leader_name',
+                    defaultContent: '-',
+                    class: 'text-center'
+                },
+                {
+                    title: "SPV",
+                    data: 'supervisor_name',
+                    name: 'supervisor_name',
+                    defaultContent: '-',
+                    class: 'text-center'
+                },
+                {
+                    title: "Site",
+                    data: 'site',
+                    name: 'site',
+                    defaultContent: '-'
+                },
+                {
+                    title: "Project",
+                    data: 'project',
+                    name: 'project',
+                    defaultContent: '-'
+                },
+                {
+                    title: "Skill",
+                    data: 'skill',
+                    name: 'skill',
+                    defaultContent: '-'
+                },
+                {
+                    title: "Join Date",
+                    data: 'join_date',
+                    name: 'join_date',
+                    defaultContent: '-',
                     class: 'text-center',
-                    searchable: false
+                    visible: false
+                },
+                {
+                    title: "Initial Leave",
+                    data: 'initial_leave',
+                    name: 'initial_leave',
+                    defaultContent: '-',
+                    class: 'text-center',
+                    visible: false
+                },
+                {
+                    title: "Used Leave",
+                    data: 'used_leave',
+                    name: 'used_leave',
+                    defaultContent: '-',
+                    class: 'text-center',
+                    visible: false
+                },
+                {
+                    title: "Remaining Leave",
+                    data: null,
+                    name: 'remaining_leave',
+                    defaultContent: '-',
+                    class: 'text-center',
+                    render: function(data, type, row) {
+                        var remainingLeave = row.initial_leave - row.used_leave;
+                        return remainingLeave;
+                    },
+                    visible: false
                 },
                 {
                     title: "{{ __('Active') }}",
