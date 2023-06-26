@@ -32,7 +32,7 @@
                         <div class="kt-container  kt-container--fluid ">
                             <div class="kt-footer__copyright justify-content-end">
                                 {{ date('Y') }}&nbsp;&copy;&nbsp;<a href="https://www.linkedin.com/in/codeirawan/"
-                                    class="kt-link">codeirawan</a>
+                                    class="kt-link">cdrwn</a>
                             </div>
                         </div>
                     </div>
