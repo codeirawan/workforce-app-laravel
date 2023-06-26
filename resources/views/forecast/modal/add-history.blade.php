@@ -113,7 +113,7 @@
                     sat: parseInt(row.find('td:eq(10)').text()),
                     sun: parseInt(row.find('td:eq(11)').text()),
                     sum: parseInt(row.find('td:eq(12)').text()),
-                    avg: parseInt(row.find('td:eq(13)').text())
+                    avg: parseFloat(row.find('td:eq(13)').text())
                 };
                 selectedData.push(data);
             });

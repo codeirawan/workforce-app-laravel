@@ -98,7 +98,13 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            return data.toString().replace('.', ',');
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "Skill",

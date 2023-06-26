@@ -169,7 +169,7 @@ class ForecastController extends Controller
                 'sat' => intval($data['sat']),
                 'sun' => intval($data['sun']),
                 'sum' => intval($data['sum']),
-                'avg' => intval($data['avg']),
+                'avg' => floatval($data['avg']),
             ]);
         }
 
@@ -183,7 +183,7 @@ class ForecastController extends Controller
             return abort(404);
         }
 
-        $getForecastId = Calculation::select('forecast_id')->where('id', $id)->get();
+        $getForecastId = Calculation::select('forecast_id')->where('forecast_id', $id)->get();
 
         if (!$getForecastId->isEmpty()) {
             $forecastId = $getForecastId->first()->forecast_id;
@@ -204,7 +204,7 @@ class ForecastController extends Controller
             return abort(404);
         }
 
-        $getForecastId = Calculation::select('forecast_id')->where('id', $id)->get();
+        $getForecastId = Calculation::select('forecast_id')->where('forecast_id', $id)->get();
 
         if (!$getForecastId->isEmpty()) {
             $forecastId = $getForecastId->first()->forecast_id;
