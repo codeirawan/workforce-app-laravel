@@ -13,7 +13,7 @@ use DataTables;
 use DB;
 use Exception;
 use Illuminate\Http\Request;
-use Lang;
+use Lang, Str;
 use Laratrust;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
@@ -182,9 +182,9 @@ class UserController extends Controller
         DB::beginTransaction();
         try {
             $user = new User;
-            $user->name = $request->name;
+            $user->name = Str::title($request->name);
             $user->nik = $request->nik;
-            $user->email = $request->email;
+            $user->email = Str::lower($request->email);
             $user->password = bcrypt('Pa$$w0rd!');
             $user->gender = $request->gender;
             $user->religion = $request->religion;

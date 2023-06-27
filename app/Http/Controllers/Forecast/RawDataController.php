@@ -44,8 +44,8 @@ class RawDataController extends Controller
                 return $startTime->format('H:i:s');
             })
             ->addColumn('end_time', function ($row) {
-                $startTime = new DateTime($row->end_time);
-                return $startTime->format('H:i:s');
+                $endTime = new DateTime($row->end_time);
+                return $endTime->format('H:i:s');
             })
             ->addColumn('action', function ($row) {
                 $edit = '<a href="' . route('raw-data.edit', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Edit') . '"><i class="la la-edit"></i></a>';
