@@ -198,6 +198,13 @@
                                         <span class="kt-menu__link-text">{{ __('National Holiday') }}</span>
                                     </a>
                                 </li>
+                                <li class="kt-menu__item @if (Request::is('master/activity*')) kt-menu__item--here @endif"
+                                    aria-haspopup="true">
+                                    <a href="{{ route('master.activity.index') }}" class="kt-menu__link">
+                                        <i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i>
+                                        <span class="kt-menu__link-text">{{ __('Activity') }}</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>

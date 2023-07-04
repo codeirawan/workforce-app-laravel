@@ -100,6 +100,9 @@ Route::middleware(['auth', 'verified'])->group(
 
                         Route::resource('national-holiday', 'NationalHolidayController')->except(['show']);
                         Route::post('/national-holiday/data', 'NationalHolidayController@data')->name('national-holiday.data');
+
+                        Route::resource('activity', 'ActivityController')->except(['show']);
+                        Route::post('/activity/data', 'ActivityController@data')->name('activity.data');
                     }
                 );
 
