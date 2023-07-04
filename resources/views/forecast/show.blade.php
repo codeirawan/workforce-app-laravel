@@ -226,7 +226,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 // {
                 //     title: "{{ __('Action') }}",
@@ -300,7 +308,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Tue') }}",
@@ -309,7 +325,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Wed') }}",
@@ -318,7 +342,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Thu') }}",
@@ -327,7 +359,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Fri') }}",
@@ -336,7 +376,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Sat') }}",
@@ -345,7 +393,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Sun') }}",
@@ -354,7 +410,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Total') }}",
@@ -363,7 +427,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "{{ __('Avg') }}",
@@ -372,7 +444,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 }
             ],
             order: [

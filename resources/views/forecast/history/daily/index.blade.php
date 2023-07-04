@@ -101,7 +101,9 @@
                     orderable: false,
                     render: function(data, type, row) {
                         if (type === 'display' && data !== '-') {
-                            return data.toString().replace('.', ',');
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
                         }
                         return data;
                     }

@@ -166,7 +166,15 @@
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,
-                    orderable: false
+                    orderable: false,
+                    render: function(data, type, row) {
+                        if (type === 'display' && data !== '-') {
+                            var roundedData = Math.round(data);
+                            var formattedData = roundedData.toString();
+                            return formattedData;
+                        }
+                        return data;
+                    }
                 },
                 {
                     title: "Skill",
