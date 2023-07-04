@@ -17,7 +17,7 @@ class CreateMasterNationalHolidaysTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->date('date');
-            $table->enum('religion', ['Muslim', 'Christian', 'Catholic', 'Hinduism', 'Buddhism', 'Confucianism',
+            $table->enum('religion', ['Muslim', 'Christian', 'Hinduism', 'Buddhism', 'Confucianism',
             '-']);
             $table->timestamps();
             $table->softDeletes();

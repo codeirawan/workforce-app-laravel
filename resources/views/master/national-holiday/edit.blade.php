@@ -75,9 +75,6 @@
                                     <option value="Christian"
                                         {{ old('religion', $nationalHoliday->religion) == 'Christian' ? 'selected' : '' }}>
                                         {{ __('Christian') }}</option>
-                                    <option value="Catholic"
-                                        {{ old('religion', $nationalHoliday->religion) == 'Catholic' ? 'selected' : '' }}>
-                                        {{ __('Catholic') }}</option>
                                     <option value="Hinduism"
                                         {{ old('religion', $nationalHoliday->religion) == 'Hinduism' ? 'selected' : '' }}>
                                         {{ __('Hinduism') }}</option>

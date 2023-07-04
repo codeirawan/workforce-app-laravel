@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('gender', ['Male', 'Female']);
-            $table->enum('religion', ['Muslim', 'Christian', 'Catholic', 'Hinduism', 'Buddhism', 'Confucianism', 'Other']);
+            $table->enum('religion', ['Muslim', 'Christian', 'Hinduism', 'Buddhism', 'Confucianism', 'Other']);
             $table->char('city_id', 4)->nullable()->index();
             $table->unsignedBigInteger('project_id')->nullable()->index();
             $table->unsignedBigInteger('skill_id')->nullable()->index();

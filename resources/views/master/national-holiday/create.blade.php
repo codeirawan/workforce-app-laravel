@@ -73,8 +73,6 @@
                                         {{ __('Muslim') }}</option>
                                     <option value="Christian" {{ old('religion') == 'Christian' ? 'selected' : '' }}>
                                         {{ __('Christian') }}</option>
-                                    <option value="Catholic" {{ old('religion') == 'Catholic' ? 'selected' : '' }}>
-                                        {{ __('Catholic') }}</option>
                                     <option value="Hinduism" {{ old('religion') == 'Hinduism' ? 'selected' : '' }}>
                                         {{ __('Hinduism') }}</option>
                                     <option value="Buddhism" {{ old('religion') == 'Buddhism' ? 'selected' : '' }}>

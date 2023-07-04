@@ -61,7 +61,7 @@ class NationalHolidayController extends Controller
         $this->validate($request, [
             'name' => ['required', 'string', 'max:191'],
             'date' => ['required'],
-            'religion' => ['required', 'in:Muslim,Christian,Catholic,Hinduism,Buddhism,Confucianism,-'],
+            'religion' => ['required', 'in:Muslim,Christian,Hinduism,Buddhism,Confucianism,-'],
         ]);
 
         $nationalHoliday = new NationalHoliday;
@@ -96,7 +96,7 @@ class NationalHolidayController extends Controller
         $this->validate($request, [
             'name' => ['required', 'string', 'max:191'],
             'date' => ['required'],
-            'religion' => ['required', 'in:Muslim,Christian,Catholic,Hinduism,Buddhism,Confucianism,-'],
+            'religion' => ['required', 'in:Muslim,Christian,Hinduism,Buddhism,Confucianism,-'],
         ]);
 
         $nationalHoliday->name = $request->name;

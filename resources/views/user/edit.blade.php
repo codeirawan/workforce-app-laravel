@@ -100,10 +100,6 @@
                                         {{ old('religion', $user->religion) == 'Christian' ? 'selected' : '' }}>
                                         {{ __('Christian') }}
                                     </option>
-                                    <option value="Catholic"
-                                        {{ old('religion', $user->religion) == 'Catholic' ? 'selected' : '' }}>
-                                        {{ __('Catholic') }}
-                                    </option>
                                     <option value="Hinduism"
                                         {{ old('religion', $user->religion) == 'Hinduism' ? 'selected' : '' }}>
                                         {{ __('Hinduism') }}
