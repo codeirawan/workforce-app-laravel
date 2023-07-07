@@ -26,7 +26,7 @@ class ActivityController extends Controller
             return abort(404);
         }
 
-        $activities = Activity::select('id', 'name');
+        $activities = Activity::select('id', 'name', 'duration');
 
         return DataTables::of($activities)
             ->addColumn('action', function ($activity) {
@@ -55,11 +55,13 @@ class ActivityController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:191'],
+            'name' => ['required', 'string', 'max:191'],
+            'duration' => ['required'],
         ]);
 
         $activity = new Activity;
-        $activity->name = $request->nama;
+        $activity->name = $request->name;
+        $activity->duration = $request->duration;
         $activity->save();
 
         $message = Lang::get('Activity') . ' \'' . $activity->name . '\' ' . Lang::get('successfully created.');
@@ -72,7 +74,7 @@ class ActivityController extends Controller
             return abort(404);
         }
 
-        $activity = Activity::select('id', 'name')->findOrFail($id);
+        $activity = Activity::select('id', 'name', 'duration')->findOrFail($id);
 
         return view('master.activity.edit', compact('activity'));
     }
@@ -86,10 +88,12 @@ class ActivityController extends Controller
         $activity = Activity::findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:191'],
+            'name' => ['required', 'string', 'max:191'],
+            'duration' => ['required'],
         ]);
 
-        $activity->name = $request->nama;
+        $activity->name = $request->name;
+        $activity->duration = $request->duration;
         $activity->save();
 
         $message = Lang::get('Activity') . ' \'' . $activity->name . '\' ' . Lang::get('successfully updated.');

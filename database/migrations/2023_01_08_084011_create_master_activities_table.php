@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('master_activities', function (Blueprint $table) {
         $table->increments('id');
         $table->string('name')->unique();
+        $table->time('duration');
         $table->timestamps();
         $table->softDeletes();
         });

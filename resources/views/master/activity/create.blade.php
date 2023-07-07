@@ -35,19 +35,33 @@
                 <div class="kt-section kt-section--first">
                     <div class="kt-section__body">
                         @include('layouts.inc.alert')
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="name">{{ __('Name') }}</label>
+                                <input id="name" name="name" type="text"
+                                    class="form-control @error('name') is-invalid @enderror" required
+                                    value="{{ old('name') }}">
 
-                        <div class="form-group">
-                            <label for="nama">{{ __('Name') }}</label>
-                            <input id="nama" name="nama" type="text"
-                                class="form-control @error('nama') is-invalid @enderror" required
-                                value="{{ old('nama') }}">
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="duration">{{ __('Time') }}</label>
+                                <input type="text" class="form-control @error('duration') is-invalid @enderror"
+                                    name="duration" id="duration" placeholder="{{ __('Select') }} {{ __('Time') }}"
+                                    readonly value="{{ old('duration') }}" required>
 
-                            @error('nama')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                                @error('duration')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -57,4 +71,13 @@
 
 @section('script')
     <script src="{{ asset(mix('js/form/validation.js')) }}"></script>
+    <script>
+        $('#duration').timepicker({
+            disableFocus: true,
+            disableMousewheel: true,
+            minuteStep: 1,
+            showMeridian: false,
+            defaultTime: '00:00',
+        });
+    </script>
 @endsection

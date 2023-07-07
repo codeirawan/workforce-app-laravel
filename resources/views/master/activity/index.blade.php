@@ -66,6 +66,13 @@
                     class: 'text-center',
                 },
                 {
+                    title: "{{ __('Duration') }}",
+                    data: 'duration',
+                    name: 'duration',
+                    defaultContent: '-',
+                    class: 'text-center',
+                },
+                {
                     title: "{{ __('Action') }}",
                     data: 'action',
                     name: 'action',
