@@ -73,6 +73,20 @@
                     class: 'text-center',
                 },
                 {
+                    title: "{{ __('Color') }}",
+                    data: 'color',
+                    name: 'color',
+                    defaultContent: '-',
+                    class: 'text-center',
+                    render: function(data, type, full, meta) {
+                        if (type === 'display') {
+                            return '<div style="width: 20px; height: 20px; background-color: ' + data +
+                                '; margin: 0 auto;"></div>';
+                        }
+                        return data;
+                    }
+                },
+                {
                     title: "{{ __('Action') }}",
                     data: 'action',
                     name: 'action',

@@ -36,7 +36,7 @@
                     <div class="kt-section__body">
                         @include('layouts.inc.alert')
                         <div class="row">
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 <label for="name">{{ __('Name') }}</label>
                                 <input id="name" name="name" type="text"
                                     class="form-control @error('name') is-invalid @enderror" required
@@ -48,13 +48,25 @@
                                     </span>
                                 @enderror
                             </div>
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 <label for="duration">{{ __('Time') }}</label>
                                 <input type="text" class="form-control @error('duration') is-invalid @enderror"
                                     name="duration" id="duration" placeholder="{{ __('Select') }} {{ __('Time') }}"
                                     readonly value="{{ old('duration') }}" required>
 
                                 @error('duration')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="color">{{ __('Color') }}</label>
+                                <input type="color" class="form-control @error('color') is-invalid @enderror"
+                                    name="color" id="color" placeholder="{{ __('Select') }} {{ __('Color') }}"
+                                    readonly value="{{ old('color') }}" required>
+
+                                @error('color')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

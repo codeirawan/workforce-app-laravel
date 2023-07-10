@@ -17,6 +17,7 @@ return new class extends Migration
         $table->increments('id');
         $table->string('name')->unique();
         $table->time('duration');
+        $table->char('color');
         $table->timestamps();
         $table->softDeletes();
         });
