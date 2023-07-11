@@ -189,8 +189,8 @@ class UserController extends Controller
             $user->gender = $request->gender;
             $user->religion = $request->religion;
             $user->city_id = $request->city_id;
-            $user->project_id = $request->project;
-            $user->skill_id = $request->skill;
+            $user->project_id = $request->project_id;
+            $user->skill_id = $request->skill_id;
 
             if ($request->team_leader !== null && $team_leader !== null) {
                 $user->team_leader_id = $team_leader->nik;
@@ -368,9 +368,9 @@ class UserController extends Controller
             $user->nik = $request->nik;
             $user->gender = $request->gender;
             $user->religion = $request->religion;
-            $user->city_id = $request->city;
-            $user->project_id = $request->project;
-            $user->skill_id = $request->skill;
+            $user->city_id = $request->city_id;
+            $user->project_id = $request->project_id;
+            $user->skill_id = $request->skill_id;
 
             if ($request->team_leader !== null && $team_leader !== null) {
                 $user->team_leader_id = $team_leader->nik;

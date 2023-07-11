@@ -171,18 +171,18 @@
                             </div>
 
                             <div class="form-group col-sm-6 project">
-                                <label for="project">{{ __('Project') }}</label>
-                                <select id="project" name="project"
-                                    class="form-control kt_selectpicker @error('project') is-invalid @enderror"
+                                <label for="project_id">{{ __('Project') }}</label>
+                                <select id="project_id" name="project_id"
+                                    class="form-control kt_selectpicker @error('project_id') is-invalid @enderror"
                                     data-live-search="true" title="{{ __('Choose') }} {{ __('Project') }}">
                                     @foreach ($projects as $project)
                                         <option value="{{ $project->id }}"
-                                            {{ old('project') == $project->id ? 'selected' : '' }}>
+                                            {{ old('project_id') == $project->id ? 'selected' : '' }}>
                                             {{ $project->name }}</option>
                                     @endforeach
                                 </select>
 
-                                @error('project')
+                                @error('project_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -190,18 +190,18 @@
                             </div>
 
                             <div class="form-group col-sm-6 skill">
-                                <label for="skill">{{ __('Skill') }}</label>
-                                <select id="skill" name="skill"
-                                    class="form-control kt_selectpicker @error('skill') is-invalid @enderror"
+                                <label for="skill_id">{{ __('Skill') }}</label>
+                                <select id="skill_id" name="skill_id"
+                                    class="form-control kt_selectpicker @error('skill_id') is-invalid @enderror"
                                     data-live-search="true" title="{{ __('Choose') }} {{ __('Skill') }}">
                                     @foreach ($skills as $skill)
                                         <option value="{{ $skill->id }}"
-                                            {{ old('skill') == $skill->id ? 'selected' : '' }}>
+                                            {{ old('skill_id') == $skill->id ? 'selected' : '' }}>
                                             {{ $skill->name }}</option>
                                     @endforeach
                                 </select>
 
-                                @error('skill')
+                                @error('skill_id')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
