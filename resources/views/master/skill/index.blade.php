@@ -59,9 +59,23 @@
                 }
             },
             columns: [{
-                    title: "{{ __('Name') }}",
-                    data: 'name',
-                    name: 'name',
+                    title: "{{ __('Site') }}",
+                    data: 'site',
+                    name: 'site',
+                    defaultContent: '-',
+                    class: 'text-center',
+                },
+                {
+                    title: "{{ __('Project') }}",
+                    data: 'project',
+                    name: 'project',
+                    defaultContent: '-',
+                    class: 'text-center',
+                },
+                {
+                    title: "{{ __('Skill') }}",
+                    data: 'skill',
+                    name: 'skill',
                     defaultContent: '-',
                     class: 'text-center',
                 },

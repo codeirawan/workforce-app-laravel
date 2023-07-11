@@ -15,9 +15,14 @@ class CreateMasterSkillsTable extends Migration
     {
         Schema::create('master_skills', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->char('city_id', 4)->nullable()->index();
+            $table->unsignedBigInteger('project_id')->nullable()->index();
             $table->string('name');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('city_id')->references('id')->on('master_cities');
+            $table->foreign('project_id')->references('id')->on('master_projects');
         });
     }
 

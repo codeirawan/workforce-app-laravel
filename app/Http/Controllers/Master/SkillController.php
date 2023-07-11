@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Models\Master\City;
+use App\Models\Master\Project;
 use App\Models\Master\Skill;
 use DataTables;
 use Illuminate\Http\Request;
@@ -26,7 +28,14 @@ class SkillController extends Controller
             return abort(404);
         }
 
-        $skills = Skill::select('id', 'name');
+        $skills = Skill::select(
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'master_skills.id'
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'master_skills.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'master_skills.project_id')->get();
 
         return DataTables::of($skills)
             ->addColumn('action', function ($skill) {
@@ -45,7 +54,10 @@ class SkillController extends Controller
             return abort(404);
         }
 
-        return view('master.skill.create');
+        $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
+        $projects = Project::select('id', 'name')->orderBy('name')->get();
+
+        return view('master.skill.create', compact('cities', 'projects'));
     }
 
     public function store(Request $request)
@@ -55,11 +67,15 @@ class SkillController extends Controller
         }
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:191'],
+            'name' => ['required', 'string', 'max:191'],
+            'city_id' => ['nullable', 'integer', 'exists:master_cities,id'],
+            'project_id' => ['nullable', 'integer', 'exists:master_projects,id'],
         ]);
 
         $skill = new Skill;
-        $skill->name = $request->nama;
+        $skill->city_id = $request->city_id;
+        $skill->project_id = $request->project_id;
+        $skill->name = $request->name;
         $skill->save();
 
         $message = Lang::get('Skill') . ' \'' . $skill->name . '\' ' . Lang::get('successfully created.');
@@ -71,10 +87,11 @@ class SkillController extends Controller
         if (!Laratrust::isAbleTo('update-master')) {
             return abort(404);
         }
+        $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
+        $projects = Project::select('id', 'name')->orderBy('name')->get();
+        $skill = Skill::select('id', 'name', 'project_id', 'city_id')->findOrFail($id);
 
-        $skill = Skill::select('id', 'name')->findOrFail($id);
-
-        return view('master.skill.edit', compact('skill'));
+        return view('master.skill.edit', compact('cities', 'projects', 'skill'));
     }
 
     public function update($id, Request $request)
@@ -86,10 +103,14 @@ class SkillController extends Controller
         $skill = Skill::findOrFail($id);
 
         $this->validate($request, [
-            'nama' => ['required', 'string', 'max:191'],
+            'name' => ['required', 'string', 'max:191'],
+            'city_id' => ['nullable', 'integer', 'exists:master_cities,id'],
+            'project_id' => ['nullable', 'integer', 'exists:master_projects,id'],
         ]);
 
-        $skill->name = $request->nama;
+        $skill->city_id = $request->city_id;
+        $skill->project_id = $request->project_id;
+        $skill->name = $request->name;
         $skill->save();
 
         $message = Lang::get('Skill') . ' \'' . $skill->name . '\' ' . Lang::get('successfully updated.');

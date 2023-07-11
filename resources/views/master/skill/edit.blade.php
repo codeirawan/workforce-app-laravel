@@ -37,17 +37,56 @@
                     <div class="kt-section__body">
                         @include('layouts.inc.alert')
 
-                        <div class="form-group">
-                            <label for="nama">{{ __('Name') }}</label>
-                            <input id="nama" name="nama" type="text"
-                                class="form-control @error('nama') is-invalid @enderror" required
-                                value="{{ old('nama', $skill->name) }}">
+                        <div class="row">
+                            <div class="form-group col-sm-4">
+                                <label for="city_id">{{ __('Site') }}</label>
+                                <select id="city_id" name="city_id"
+                                    class="form-control kt_selectpicker @error('city_id') is-invalid @enderror"
+                                    data-live-search="true">
+                                    @foreach ($cities as $city)
+                                        <option value="{{ $city->id }}"
+                                            {{ old('city_id', $skill->city_id) == $city->id ? 'selected' : '' }}>
+                                            {{ $city->name }}</option>
+                                    @endforeach
+                                </select>
 
-                            @error('nama')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                                @error('city_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label for="project_id">{{ __('Project') }}</label>
+                                <select id="project_id" name="project_id"
+                                    class="form-control kt_selectpicker @error('project_id') is-invalid @enderror"
+                                    data-live-search="true">
+                                    @foreach ($projects as $project)
+                                        <option value="{{ $project->id }}"
+                                            {{ old('project_id', $skill->project_id) == $project->id ? 'selected' : '' }}>
+                                            {{ $project->name }}</option>
+                                    @endforeach
+                                </select>
+
+                                @error('project_id')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-sm-4">
+                                <label for="name">{{ __('Skill Name') }}</label>
+                                <input id="name" name="name" type="text"
+                                    class="form-control @error('name') is-invalid @enderror" required
+                                    value="{{ old('name', $skill->name) }}">
+
+                                @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -58,4 +97,9 @@
 
 @section('script')
     <script src="{{ asset(mix('js/form/validation.js')) }}"></script>
+    <script type="text/javascript">
+        $('.kt_selectpicker').selectpicker({
+            noneResultsText: "{{ __('No matching results for') }} {0}"
+        });
+    </script>
 @endsection
