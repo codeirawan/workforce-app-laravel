@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table id="resultsTable" class="table text-center">
+                <table id="resultsTable" class="table table-striped table-bordered text-center">
                     <thead>
                         <tr>
                             <th>Site</th>

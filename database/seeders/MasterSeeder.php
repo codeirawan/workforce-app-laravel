@@ -85,6 +85,8 @@ class MasterSeeder extends Seeder
         $skills = ['Inbound VIP', 'Inbound SLI', 'Inbound Postpaid', 'Inbound English', 'Inbound Prepaid HVC', 'Inbound Prepaid MVC', 'Inbound LVC', 'Inbound FMC'];
         foreach ($skills as $skillName) {
             $skill = new Skill();
+            $skill->city_id = 3374;
+            $skill->project_id = 1;
             $skill->name = $skillName;
             $skill->save();
         }
