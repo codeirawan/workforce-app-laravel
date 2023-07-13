@@ -81,8 +81,9 @@
                                 Target Answer Time : {{ $params->target_answer_time }}s |
                                 Shrinkage : {{ $params->shrinkage }}%
 
-                                <a href="{{ route('forecast.edit', $params->id) }}" title="{{ Lang::get('Edit') }}"> <i
-                                        class="fa-solid fa-edit"></i>
+                                <a href="{{ route('forecast.edit', $params->id) }}" title="{{ Lang::get('Edit') }}">
+                                    <i class="fa-solid fa-edit"></i>
+                                </a>
                             </h6>
                         </div>
                     </div>
