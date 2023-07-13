@@ -24,7 +24,14 @@ class ForecastController extends Controller
 
         $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
         $projects = Project::select('id', 'name')->orderBy('name')->get();
-        $skills = Skill::select('id', 'name')->orderBy('name')->get();
+        $skills = Skill::select(
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'master_skills.id'
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'master_skills.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'master_skills.project_id')->get();
 
         return view('forecast.index', compact('cities', 'projects', 'skills'));
     }
@@ -36,8 +43,8 @@ class ForecastController extends Controller
         }
 
         $this->validate($request, [
-            'city_id' => 'required',
-            'project_id' => 'required',
+            // 'city_id' => 'required',
+            // 'project_id' => 'required',
             'skill_id' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
@@ -48,11 +55,13 @@ class ForecastController extends Controller
             'shrinkage' => 'required|integer',
         ]);
 
+        $skill = Skill::select('city_id', 'project_id')->findOrFail($request->skill_id);
+
         DB::beginTransaction();
         try {
             $forecast = new Params;
-            $forecast->city_id = $request->city_id;
-            $forecast->project_id = $request->project_id;
+            $forecast->city_id = $skill->city_id;
+            $forecast->project_id = $skill->project_id;
             $forecast->skill_id = $request->skill_id;
             $forecast->start_date = $request->start_date;
             $forecast->end_date = $request->end_date;
@@ -81,8 +90,20 @@ class ForecastController extends Controller
         }
 
         $params = Params::all()->where('id', '=', $id)->firstOrFail();
+        $skill = Skill::select(
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'master_skills.id'
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'master_skills.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'master_skills.project_id')
+            ->whereCityId($params->city_id)
+            ->whereProjectId($params->project_id)
+            ->where('master_skills.id', $params->skill_id)
+            ->firstOrFail();
 
-        return view('forecast.show', compact('params'));
+        return view('forecast.show', compact('params', 'skill'));
     }
 
     public function paramsForecast()
@@ -95,15 +116,95 @@ class ForecastController extends Controller
 
         return DataTables::of($paramsForecast)
             ->addColumn('action', function ($row) {
-                $view = '<a href="' . route('forecast.show', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Calculation') . '"><i class="la la-wrench"></i></a>';
-                // $delete = '<a href="#" data-href="' . route('forecast.destroy', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Delete') . '" data-toggle="modal" data-target="#modal-delete" data-key="' . $row->start_date . '"><i class="la la-trash"></i></a>';
+                $view = '<a href="' . route('forecast.show', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('FTE Requirement') . '"><i class="fa-solid fa-sm fa-list-ol"></i></a>';
+                $edit = '<a href="' . route('forecast.edit', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Edit') . '"><i class="fa-solid fa-sm fa-edit"></i></a>';
+                $delete = '<a href="#" data-href="' . route('forecast.destroy', $row->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Delete') . '" data-toggle="modal" data-target="#modal-delete" data-key="' . $row->skill . ' - ' . $row->project . ' ' . $row->site . ' | Date ' . $row->start_date . ' ~ ' . $row->end_date . '"><i class="fa-solid fa-sm fa-trash"></i></a>';
 
-                return (Laratrust::isAbleTo('view-forecast') ? $view : '');
-                //  . (Laratrust::isAbleTo('delete-forecast') ? $delete : '');
+                return (Laratrust::isAbleTo('view-forecast') ? $view : '')
+                    . (Laratrust::isAbleTo('update-forecast') ? $edit : '')
+                    . (Laratrust::isAbleTo('delete-forecast') ? $delete : '');
             })
             ->rawColumns(['action'])
             ->make(true);
 
+    }
+
+    public function edit($id)
+    {
+        if (!Laratrust::isAbleTo('update-forecast')) {
+            return abort(404);
+        }
+
+        $params = Params::all()->where('id', '=', $id)->firstOrFail();
+        $skill = Skill::select(
+            'master_cities.name AS site',
+            'master_projects.name AS project',
+            'master_skills.name AS skill',
+            'master_skills.id'
+        )
+            ->leftJoin('master_cities', 'master_cities.id', '=', 'master_skills.city_id')
+            ->leftJoin('master_projects', 'master_projects.id', '=', 'master_skills.project_id')
+            ->whereCityId($params->city_id)
+            ->whereProjectId($params->project_id)
+            ->where('master_skills.id', $params->skill_id)
+            ->firstOrFail();
+
+        return view('forecast.edit', compact('params', 'skill'));
+    }
+
+    public function update($id, Request $request)
+    {
+        if (!Laratrust::isAbleTo('update-forecast')) {
+            return abort(404);
+        }
+
+        $this->validate($request, [
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'avg_handling_time' => 'required|integer',
+            'reporting_period' => 'required|integer',
+            'service_level' => 'required|integer',
+            'target_answer_time' => 'required|integer',
+            'shrinkage' => 'required|integer',
+        ]);
+
+        $forecast = Params::findOrFail($id);
+
+        DB::beginTransaction();
+        try {
+            $forecast->start_date = $request->start_date;
+            $forecast->end_date = $request->end_date;
+            $forecast->avg_handling_time = $request->avg_handling_time;
+            $forecast->reporting_period = $request->reporting_period;
+            $forecast->service_level = $request->service_level;
+            $forecast->target_answer_time = $request->target_answer_time;
+            $forecast->shrinkage = $request->shrinkage;
+            $forecast->save();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            report($e);
+            return abort(500);
+        }
+        DB::commit();
+
+        $message = Lang::get('Forecast period') . ' \'' . $forecast->start_date . '\' ' . '-' . ' \'' . $forecast->end_date . '\' ' . Lang::get('successfully updated.');
+        return redirect()->route('forecast.index')->with('status', $message);
+    }
+
+    public function destroy($id)
+    {
+        if (!Laratrust::isAbleTo('delete-forecast')) {
+            return abort(404);
+        }
+
+        $forecast = Params::findOrFail($id);
+        $start = $forecast->start_date;
+        $end = $forecast->end_date;
+        $forecast->delete();
+
+        $message = Lang::get('Forecast period ') . ' \'' . $start . '\' ' . ('-') . ' \'' . $end . '\' ' . Lang::get('was deleted.');
+        return redirect()->route('forecast.index')->with('status', $message);
     }
 
     public function showHistory($id)

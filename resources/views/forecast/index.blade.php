@@ -25,7 +25,7 @@
 
                 @if (Laratrust::isAbleTo('create-forecast'))
                     <a href="#" class="btn btn-primary mb-4" data-toggle="modal" data-target="#modal-new-forecast">
-                        <i class="fa-solid fa-magnifying-glass"></i> {{ __('New Forecast') }}
+                        <i class="fa-solid fa-magnifying-glass-chart"></i> {{ __('New Forecast') }}
                     </a>
                 @endif
 
@@ -77,7 +77,7 @@
                     orderable: false,
                 },
                 {
-                    title: "{{ __('Start Date') }}",
+                    title: "{{ __('Start') }}",
                     data: 'start_date',
                     name: 'start_date',
                     defaultContent: '-',
@@ -87,7 +87,7 @@
                     }
                 },
                 {
-                    title: "{{ __('End Date') }}",
+                    title: "{{ __('End') }}",
                     data: 'end_date',
                     name: 'end_date',
                     defaultContent: '-',
@@ -124,7 +124,16 @@
                     orderable: false
                 },
                 {
-                    title: "{{ __('Reporting Period') }}",
+                    title: "{{ __('AHT') }}",
+                    data: 'avg_handling_time',
+                    name: 'avg_handling_time',
+                    defaultContent: '-',
+                    class: 'text-center',
+                    searchable: false,
+                    orderable: false
+                },
+                {
+                    title: "{{ __('Period') }}",
                     data: 'reporting_period',
                     name: 'reporting_period',
                     defaultContent: '-',
@@ -133,16 +142,7 @@
                     orderable: false
                 },
                 {
-                    title: "{{ __('Target Answer Time') }}",
-                    data: 'target_answer_time',
-                    name: 'target_answer_time',
-                    defaultContent: '-',
-                    class: 'text-center',
-                    searchable: false,
-                    orderable: false
-                },
-                {
-                    title: "{{ __('Service Level') }}",
+                    title: "{{ __('SL') }}",
                     data: 'service_level',
                     name: 'service_level',
                     defaultContent: '-',
@@ -151,9 +151,9 @@
                     orderable: false
                 },
                 {
-                    title: "{{ __('Avg Handling Time') }}",
-                    data: 'avg_handling_time',
-                    name: 'avg_handling_time',
+                    title: "{{ __('TAT') }}",
+                    data: 'target_answer_time',
+                    name: 'target_answer_time',
                     defaultContent: '-',
                     class: 'text-center',
                     searchable: false,

@@ -64,6 +64,7 @@
                 if (Array.isArray(response)) {
                     // Populate the modal table with the response data
                     response.forEach(function(result) {
+                        var roundedAvgPerWeek = Math.round(result.avg_per_week);
                         var row = '<tr>' +
                             '<td>' + result.site + '</td>' +
                             '<td>' + result.project + '</td>' +
@@ -78,7 +79,7 @@
                             '<td>' + result.sat + '</td>' +
                             '<td>' + result.sun + '</td>' +
                             '<td>' + result.sum_per_week + '</td>' +
-                            '<td>' + result.avg_per_week + '</td>' +
+                            '<td>' + roundedAvgPerWeek + '</td>' +
                             '<td><input type="checkbox" value="' + result.start_date + '|' +
                             result.end_date + '"></td>' +
                             '</tr>';

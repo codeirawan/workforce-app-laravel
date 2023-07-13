@@ -13,28 +13,42 @@
     $endDate = \Carbon\Carbon::parse($params->end_date)->format('d M Y');
 @endphp
 
-@section('subheader')
-    {{ __('Calculation Forecast') }} {{ $startDate }} - {{ $endDate }}
+@section('breadcrumb')
+    <span class="kt-subheader__breadcrumbs-separator"></span>
+    <a href="{{ route('forecast.index') }}" class="kt-subheader__breadcrumbs-link">{{ __('Calculation Forecast') }}
+        {{ $startDate }} - {{ $endDate }} ({{ $skill->skill . ' - ' . $skill->project . ' ' . $skill->site }})</a>
 @endsection
 
 
 @section('content')
     <div class="kt-portlet">
+        <div class="kt-portlet__head kt-portlet__head--lg">
+            <div class="kt-portlet__head-label">
+                <h3 class="kt-portlet__head-title">{{ __('Capacity Planning') }}</h3>
+            </div>
+            <div class="kt-portlet__head-toolbar">
+                <a href="{{ route('forecast.index') }}" class="btn btn-secondary kt-margin-r-10">
+                    <i class="la la-arrow-left"></i>
+                    <span class="kt-hidden-mobile">{{ __('Back') }}</span>
+                </a>
+                @if (Laratrust::isAbleTo('create-forecast'))
+                    <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modal-add-history">
+                        <i class="fa-solid fa-plus"></i> {{ __('Add History') }}
+                    </a>
+                @endif
+            </div>
+        </div>
         <div class="kt-portlet__body">
             <div class="kt-portlet__content">
                 @include('layouts.inc.alert')
 
-                @if (Laratrust::isAbleTo('create-forecast'))
-                    <a href="#" class="btn btn-primary mb-4" data-toggle="modal" data-target="#modal-add-history">
-                        <i class="fa-solid fa-plus"></i> {{ __('Add History') }}
-                    </a>
-                @endif
+
 
                 <div class="card card-custom gutter-b mb-4">
                     <div class="bg-secondary text-dark">
                         <div class="card-title">
                             <h6 class="card-label mt-2 ml-4 p-2">
-                                Pattern Weekly by History Actual
+                                Pattern Weekly by History Actual <i class="fa-solid fa-clock-rotate-left"></i>
                             </h6>
                         </div>
                     </div>
@@ -47,7 +61,7 @@
                     <div class="bg-secondary text-dark">
                         <div class="card-title">
                             <h6 class="card-label mt-2 ml-4 p-2">
-                                CO Forecast
+                                CO Forecast <i class="fa-solid fa-chart-simple"></i>
                             </h6>
                         </div>
                     </div>
@@ -60,18 +74,15 @@
                     <div class="bg-secondary text-dark">
                         <div class="card-title">
                             <h6 class="card-label mt-2 ml-4 p-2">
-                                FTE Requirement
-                                {{-- AHT : {{ $params->avg_handling_time }} |
-                                Reporting Period : {{ $params->reporting_period }}min |
-                                Service Level : {{ $params->service_level }}% |
-                                Target Answer Time : {{ $params->target_answer_time }}sec |
+                                FTE Requirement | Params =
+                                AHT : {{ $params->avg_handling_time }}s |
+                                Reporting Period : {{ $params->reporting_period }}s |
+                                SL : {{ $params->service_level }}% |
+                                Target Answer Time : {{ $params->target_answer_time }}s |
                                 Shrinkage : {{ $params->shrinkage }}%
 
-                                <a href="#" data-href="#" class="btn btn-icon btn-tooltip mb-0"
-                                    style="margin-top: -5px;" title="{{ Lang::get('Edit') }}" data-toggle="modal"
-                                    data-target="#modal-edit-pre-test{{ $params->id }}" data-key="#"><i
-                                        class="la la-edit"></i>
-                                </a> --}}
+                                <a href="{{ route('forecast.edit', $params->id) }}" title="{{ Lang::get('Edit') }}"> <i
+                                        class="fa-solid fa-edit"></i>
                             </h6>
                         </div>
                     </div>

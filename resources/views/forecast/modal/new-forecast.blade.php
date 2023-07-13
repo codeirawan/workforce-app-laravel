@@ -1,7 +1,7 @@
 <div class="modal fade" id="modal-new-forecast" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
-            <form name="newForecast" action="{{ route('forecast.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('forecast.store') }}" method="POST" id="newForecast" name="newForecast">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title">{{ __('Create New Forecast') }}</h5>
@@ -11,43 +11,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group col-sm-4">
-                            <label for="city_id">{{ __('Site') }}</label>
-                            <select id="city_id" name="city_id"
-                                class="form-control kt_selectpicker @error('city_id') is-invalid @enderror" required
-                                data-live-search="true" title="{{ __('Choose') }} {{ __('Site') }}">
-                                @foreach ($cities as $city)
-                                    <option value="{{ $city->id }}"
-                                        {{ old('city_id') == $city->id ? 'selected' : '' }}>
-                                        {{ $city->name }}</option>
-                                @endforeach
-                            </select>
-
-                            @error('city_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-sm-4">
-                            <label for="project_id">{{ __('Project') }}</label>
-                            <select id="project_id" name="project_id"
-                                class="form-control kt_selectpicker @error('project_id') is-invalid @enderror" required
-                                data-live-search="true" title="{{ __('Choose') }} {{ __('Project') }}">
-                                @foreach ($projects as $project)
-                                    <option value="{{ $project->id }}"
-                                        {{ old('project_id') == $project->id ? 'selected' : '' }}>
-                                        {{ $project->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('project_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group col-sm-4">
+                        <div class="form-group col-sm-12">
                             <label for="skill_id">{{ __('Skill') }}</label>
                             <select id="skill_id" name="skill_id"
                                 class="form-control kt_selectpicker @error('skill_id') is-invalid @enderror" required
@@ -55,7 +19,7 @@
                                 @foreach ($skills as $skill)
                                     <option value="{{ $skill->id }}"
                                         {{ old('skill_id') == $skill->id ? 'selected' : '' }}>
-                                        {{ $skill->name }}</option>
+                                        {{ $skill->skill }} - {{ $skill->project }} {{ $skill->site }}</option>
                                 @endforeach
                             </select>
 
@@ -91,30 +55,34 @@
                             @enderror
                         </div>
                         <div class="form-group col-sm-4">
-                            <input type="number" class="form-control" name="avg_handling_time"
-                                placeholder="Avg Handling Time" autocomplete="off" required>
+                            <label for="avg_handling_time">{{ __('Avg Handling Time') }}</label>
+                            <input type="number" class="form-control" min="0" id="avg_handling_time"
+                                name="avg_handling_time" autocomplete="off" required>
                         </div>
                         <div class="form-group col-sm-4">
-                            <input type="number" class="form-control" name="reporting_period"
-                                placeholder="Reporting Period" autocomplete="off" required>
+                            <label for="reporting_period">{{ __('Reporting Period') }}</label>
+                            <input type="number" class="form-control" min="0" id="reporting_period"
+                                name="reporting_period" autocomplete="off" required>
                         </div>
                         <div class="form-group col-sm-4">
-                            <input type="number" class="form-control" name="service_level" placeholder="Service Level"
-                                autocomplete="off" required>
+                            <label for="service_level">{{ __('Service Level') }}</label>
+                            <input type="number" class="form-control" min="0" id="service_level"
+                                name="service_level" autocomplete="off" required>
                         </div>
                         <div class="form-group col-sm-4">
-                            <input type="number" class="form-control" name="target_answer_time"
-                                placeholder="Target Answer Time" autocomplete="off" required>
+                            <label for="target_answer_time">{{ __('Target Answer Time') }}</label>
+                            <input type="number" class="form-control" min="0" id="target_answer_time"
+                                name="target_answer_time" autocomplete="off" required>
                         </div>
                         <div class="form-group col-sm-4">
-                            <input type="number" class="form-control" name="shrinkage" placeholder="Shrinkage"
+                            <label for="shrinkage">{{ __('Shrinkage') }}</label>
+                            <input type="number" class="form-control" min="0" id="shrinkage" name="shrinkage"
                                 autocomplete="off" required>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
                     <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
                 </div>
             </form>
@@ -130,6 +98,7 @@
         format: "yyyy-mm-dd",
         language: "{{ config('app.locale') }}",
         startDate: "0d",
+        weekStart: 1,
         templates: {
             leftArrow: '<i class="la la-angle-left"></i>',
             rightArrow: '<i class="la la-angle-right"></i>'
@@ -144,6 +113,7 @@
         format: "yyyy-mm-dd",
         language: "{{ config('app.locale') }}",
         startDate: "0d",
+        weekStart: 1,
         templates: {
             leftArrow: '<i class="la la-angle-left"></i>',
             rightArrow: '<i class="la la-angle-right"></i>'
