@@ -299,21 +299,302 @@ class ForecastController extends Controller
         }
     }
 
-    public function resultForecast($id)
+    public function fteReqMon($id)
     {
         if (!Laratrust::isAbleTo('view-forecast')) {
             return abort(404);
         }
 
-        $getForecastId = Calculation::select('forecast_id')->where('forecast_id', $id)->get();
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.mon',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
 
-        if (!$getForecastId->isEmpty()) {
-            $forecastId = $getForecastId->first()->forecast_id;
+        if ($getParams !== null) {
+            $intervalMonday = DB::select(
+                'CALL forecast.fte_req_mon(:mon, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'mon' => $getParams->mon,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
 
-            $resultForecast = DB::select('CALL forecast.sum_forecast(?)', [$forecastId]);
+            return DataTables::of($intervalMonday)->make(true);
+        } else {
+            return response()->json(['data' => []]);
+        }
+    }
 
-            return DataTables::of($resultForecast)->make(true);
+    public function fteReqTue($id)
+    {
+        if (!Laratrust::isAbleTo('view-forecast')) {
+            return abort(404);
+        }
 
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.tue',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
+
+        if ($getParams !== null) {
+            $intervalTuesday = DB::select(
+                'CALL forecast.fte_req_tue(:tue, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'tue' => $getParams->tue,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
+
+            return DataTables::of($intervalTuesday)->make(true);
+        } else {
+            return response()->json(['data' => []]);
+        }
+    }
+
+    public function fteReqWed($id)
+    {
+        if (!Laratrust::isAbleTo('view-forecast')) {
+            return abort(404);
+        }
+
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.wed',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
+
+        if ($getParams !== null) {
+            $intervalWednesday = DB::select(
+                'CALL forecast.fte_req_wed(:wed, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'wed' => $getParams->wed,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
+
+            return DataTables::of($intervalWednesday)->make(true);
+        } else {
+            return response()->json(['data' => []]);
+        }
+    }
+
+    public function fteReqThu($id)
+    {
+        if (!Laratrust::isAbleTo('view-forecast')) {
+            return abort(404);
+        }
+
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.thu',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
+
+        if ($getParams !== null) {
+            $intervalThursday = DB::select(
+                'CALL forecast.fte_req_thu(:thu, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'thu' => $getParams->thu,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
+
+            return DataTables::of($intervalThursday)->make(true);
+        } else {
+            return response()->json(['data' => []]);
+        }
+    }
+
+    public function fteReqFri($id)
+    {
+        if (!Laratrust::isAbleTo('view-forecast')) {
+            return abort(404);
+        }
+
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.fri',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
+
+        if ($getParams !== null) {
+            $intervalFriday = DB::select(
+                'CALL forecast.fte_req_fri(:fri, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'fri' => $getParams->fri,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
+
+            return DataTables::of($intervalFriday)->make(true);
+        } else {
+            return response()->json(['data' => []]);
+        }
+    }
+
+    public function fteReqSat($id)
+    {
+        if (!Laratrust::isAbleTo('view-forecast')) {
+            return abort(404);
+        }
+
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.sat',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
+
+        if ($getParams !== null) {
+            $intervalSaturday = DB::select(
+                'CALL forecast.fte_req_sat(:sat, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'sat' => $getParams->sat,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
+
+            return DataTables::of($intervalSaturday)->make(true);
+        } else {
+            return response()->json(['data' => []]);
+        }
+    }
+
+    public function fteReqSun($id)
+    {
+        if (!Laratrust::isAbleTo('view-forecast')) {
+            return abort(404);
+        }
+
+        $getParams = Calculation::select(
+            'calculations.forecast_id',
+            'calculations.start_date AS date1',
+            'calculations.end_date AS date2',
+            'calculations.sun',
+            'params.avg_handling_time',
+            'params.reporting_period',
+            'params.service_level',
+            'params.service_level',
+            'params.target_answer_time',
+            'params.shrinkage',
+        )
+            ->leftJoin('params', 'params.id', '=', 'calculations.forecast_id')
+            ->where('forecast_id', $id)
+            ->first();
+
+        if ($getParams !== null) {
+            $intervalSunday = DB::select(
+                'CALL forecast.fte_req_sun(:sun, :avg_handling_time, :reporting_period, :service_level, :target_answer_time, :shrinkage, :date1, :date2)',
+                [
+                    'sun' => $getParams->sun,
+                    'avg_handling_time' => $getParams->avg_handling_time,
+                    'reporting_period' => $getParams->reporting_period,
+                    'service_level' => $getParams->service_level,
+                    'target_answer_time' => $getParams->target_answer_time,
+                    'shrinkage' => $getParams->shrinkage,
+                    'date1' => $getParams->date1,
+                    'date2' => $getParams->date2
+                ]
+            );
+
+            return DataTables::of($intervalSunday)->make(true);
         } else {
             return response()->json(['data' => []]);
         }

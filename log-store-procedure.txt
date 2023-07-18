@@ -1,1 +1,0 @@
-12/07/2023 get_forecast_params => WHERE p.deleted_at IS NULL;

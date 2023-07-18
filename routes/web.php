@@ -27,6 +27,13 @@ Route::middleware(['auth', 'verified'])->group(
                 Route::post('/forecast/calculation', 'ForecastController@addCalculation')->name('forecast.calculation');
                 Route::post('/forecast/average/{id}', 'ForecastController@averageHistory')->name('forecast.average');
                 Route::post('/forecast/result/{id}', 'ForecastController@resultForecast')->name('forecast.result');
+                Route::post('/forecast/mon/{id}', 'ForecastController@fteReqMon')->name('forecast.mon');
+                Route::post('/forecast/tue/{id}', 'ForecastController@fteReqTue')->name('forecast.tue');
+                Route::post('/forecast/wed/{id}', 'ForecastController@fteReqWed')->name('forecast.wed');
+                Route::post('/forecast/thu/{id}', 'ForecastController@fteReqThu')->name('forecast.thu');
+                Route::post('/forecast/fri/{id}', 'ForecastController@fteReqFri')->name('forecast.fri');
+                Route::post('/forecast/sat/{id}', 'ForecastController@fteReqSat')->name('forecast.sat');
+                Route::post('/forecast/sun/{id}', 'ForecastController@fteReqSun')->name('forecast.sun');
 
             });
         });
