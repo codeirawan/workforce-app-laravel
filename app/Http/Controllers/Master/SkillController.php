@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use App\Models\Master\City;
 use App\Models\Master\Project;
+use App\Models\Master\Shift;
+use App\Models\Master\ShiftSkill;
 use App\Models\Master\Skill;
 use DataTables;
 use Illuminate\Http\Request;
@@ -56,8 +58,9 @@ class SkillController extends Controller
 
         $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
         $projects = Project::select('id', 'name')->orderBy('name')->get();
+        $shifting = Shift::select('id', 'name', 'start_time', 'end_time')->orderBy('name')->get();
 
-        return view('master.skill.create', compact('cities', 'projects'));
+        return view('master.skill.create', compact('cities', 'projects', 'shifting'));
     }
 
     public function store(Request $request)
@@ -78,6 +81,20 @@ class SkillController extends Controller
         $skill->name = $request->name;
         $skill->save();
 
+        // Handle shift skills
+        if ($request->has('shift_skill')) {
+            $shiftSkills = $request->input('shift_skill');
+
+            // Assuming shift_skill is an array of shift IDs
+            foreach ($shiftSkills as $shiftId) {
+                // Create and save a new ShiftSkill record for the current skill
+                ShiftSkill::create([
+                    'skill_id' => $skill->id,
+                    'shift_id' => $shiftId,
+                ]);
+            }
+        }
+
         $message = Lang::get('Skill') . ' \'' . $skill->name . '\' ' . Lang::get('successfully created.');
         return redirect()->route('master.skill.index')->with('status', $message);
     }
@@ -90,8 +107,10 @@ class SkillController extends Controller
         $cities = City::select('id', 'name')->orderBy('name')->whereIn('id', ['3171', '3374', '3471', '3372'])->get();
         $projects = Project::select('id', 'name')->orderBy('name')->get();
         $skill = Skill::select('id', 'name', 'project_id', 'city_id')->findOrFail($id);
+        $shifting = Shift::select('id', 'name', 'start_time', 'end_time')->orderBy('name')->get();
+        $shiftSkills = ShiftSkill::where('skill_id', $id)->pluck('shift_id')->toArray();
 
-        return view('master.skill.edit', compact('cities', 'projects', 'skill'));
+        return view('master.skill.edit', compact('cities', 'projects', 'skill', 'shifting', 'shiftSkills'));
     }
 
     public function update($id, Request $request)
@@ -112,6 +131,23 @@ class SkillController extends Controller
         $skill->project_id = $request->project_id;
         $skill->name = $request->name;
         $skill->save();
+
+        // Handle shift skills
+        if ($request->has('shift_skill')) {
+            $shiftSkills = $request->input('shift_skill');
+
+            // Update shift skills for the current skill
+            ShiftSkill::where('skill_id', $id)->delete(); // Remove existing shift skills
+
+            // Assuming shift_skill is an array of shift IDs
+            foreach ($shiftSkills as $shiftId) {
+                // Create and save a new ShiftSkill record for the current skill
+                ShiftSkill::create([
+                    'skill_id' => $id,
+                    'shift_id' => $shiftId,
+                ]);
+            }
+        }
 
         $message = Lang::get('Skill') . ' \'' . $skill->name . '\' ' . Lang::get('successfully updated.');
         return redirect()->route('master.skill.index')->with('status', $message);

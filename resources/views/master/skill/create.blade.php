@@ -88,6 +88,39 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="kt-section">
+                            <div class="kt-section__body">
+                                <h5 class="kt-section__title kt-section__title-sm">{{ __('Select Shift') }}</h5>
+
+                                <table class="table table-striped text-center">
+                                    <tr class="bg-dark text-white">
+                                        <td>Shift Name</td>
+                                        <td>Start Time</td>
+                                        <td>End Time</td>
+                                        <td>Checklist</td>
+                                    </tr>
+                                    @foreach ($shifting as $i => $shift)
+                                        <tr>
+                                            <td>{{ __($shift->name) }}</td>
+                                            <td>{{ __($shift->start_time) }}</td>
+                                            <td>{{ __($shift->end_time) }}</td>
+                                            <td>
+                                                <span
+                                                    class="kt-switch kt-switch--sm kt-switch--icon kt-switch--primary kt-switch--outline">
+                                                    <label class="mb-0">
+                                                        <input type="checkbox" value="{{ $shift->id }}"
+                                                            name="shift_skill[{{ $i }}]"
+                                                            {{ old('shift_skill.' . $i) == $shift->id ? 'checked' : '' }}>
+                                                        <span class="m-0"></span>
+                                                    </label>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
