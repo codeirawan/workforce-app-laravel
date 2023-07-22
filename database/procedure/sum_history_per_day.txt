@@ -1,0 +1,48 @@
+CREATE DEFINER=`devapp`@`%` PROCEDURE `forecast`.`sum_history_per_day`()
+BEGIN
+SELECT
+  rd.`date` AS date,
+  SUM(rd.volume) AS `sum_per_day`,
+  AVG(rd.volume) AS `avg_per_day`,
+  mc.name AS site,
+  mp.name AS project,
+  ms.name AS skill,
+  SUM(CASE WHEN HOUR(rd.start_time) = 0 THEN rd.volume ELSE 0 END) AS `00:00 - 01:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 1 THEN rd.volume ELSE 0 END) AS `01:00 - 02:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 2 THEN rd.volume ELSE 0 END) AS `02:00 - 03:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 3 THEN rd.volume ELSE 0 END) AS `03:00 - 04:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 4 THEN rd.volume ELSE 0 END) AS `04:00 - 05:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 5 THEN rd.volume ELSE 0 END) AS `05:00 - 06:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 6 THEN rd.volume ELSE 0 END) AS `06:00 - 07:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 7 THEN rd.volume ELSE 0 END) AS `07:00 - 08:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 8 THEN rd.volume ELSE 0 END) AS `08:00 - 09:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 9 THEN rd.volume ELSE 0 END) AS `09:00 - 10:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 10 THEN rd.volume ELSE 0 END) AS `10:00 - 11:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 11 THEN rd.volume ELSE 0 END) AS `11:00 - 12:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 12 THEN rd.volume ELSE 0 END) AS `12:00 - 13:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 13 THEN rd.volume ELSE 0 END) AS `13:00 - 14:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 14 THEN rd.volume ELSE 0 END) AS `14:00 - 15:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 15 THEN rd.volume ELSE 0 END) AS `15:00 - 16:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 16 THEN rd.volume ELSE 0 END) AS `16:00 - 17:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 17 THEN rd.volume ELSE 0 END) AS `17:00 - 18:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 18 THEN rd.volume ELSE 0 END) AS `18:00 - 19:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 19 THEN rd.volume ELSE 0 END) AS `19:00 - 20:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 20 THEN rd.volume ELSE 0 END) AS `20:00 - 21:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 21 THEN rd.volume ELSE 0 END) AS `21:00 - 22:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 22 THEN rd.volume ELSE 0 END) AS `22:00 - 23:00`,
+  SUM(CASE WHEN HOUR(rd.start_time) = 23 THEN rd.volume ELSE 0 END) AS `23:00 - 00:00`
+FROM
+  forecast.raw_data rd
+LEFT JOIN
+  forecast.master_cities mc ON mc.id = rd.city_id
+LEFT JOIN
+  forecast.master_projects mp ON mp.id = rd.project_id
+LEFT JOIN
+  forecast.master_skills ms ON ms.id = rd.skill_id
+WHERE
+  rd.deleted_at IS NULL
+GROUP BY
+  rd.`date`, mc.name, mp.name, ms.name
+ORDER BY
+  rd.`date`, mc.name, mp.name, ms.name;
+END

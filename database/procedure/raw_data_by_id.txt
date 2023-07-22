@@ -1,0 +1,30 @@
+CREATE DEFINER=`devapp`@`%` PROCEDURE `forecast`.`raw_data_by_id`(IN id INT)
+BEGIN
+SELECT
+  rd.id,
+  rd.`date`,
+  rd.start_time,
+  rd.end_time,
+  rd.volume,
+  mc.name AS site,
+  mp.name AS project,
+  ms.name AS skill,
+  mc.id as city_id,
+  mp.id as project_id,
+  ms.id as skill_id,
+  rd.batch_id,
+  rd.created_at
+FROM
+  forecast.raw_data rd
+LEFT JOIN
+  forecast.master_cities mc ON mc.id = rd.city_id
+LEFT JOIN
+  forecast.master_projects mp ON mp.id = rd.project_id
+LEFT JOIN
+  forecast.master_skills ms ON ms.id = rd.skill_id
+WHERE rd.id = id
+AND rd.deleted_at IS NULL
+ORDER BY
+  rd.created_at DESC, rd.`date`, rd.start_time, rd.end_time
+LIMIT 1;
+END

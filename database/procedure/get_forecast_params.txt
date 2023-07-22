@@ -1,0 +1,20 @@
+CREATE DEFINER=`devapp`@`%` PROCEDURE `forecast`.`get_forecast_params`()
+BEGIN
+    SELECT 
+    	p.id,	
+        p.start_date,
+        p.end_date,
+        mc.name AS site,
+        mp.name AS project,
+        ms.name AS skill,
+        p.reporting_period,
+        p.target_answer_time,
+        p.service_level,
+        p.avg_handling_time,
+        p.shrinkage
+    FROM forecast.params p
+    LEFT JOIN forecast.master_cities mc ON mc.id = p.city_id
+    LEFT JOIN forecast.master_projects mp ON mp.id = p.project_id
+    LEFT JOIN forecast.master_skills ms ON ms.id = p.skill_id
+    WHERE p.deleted_at IS NULL;
+END

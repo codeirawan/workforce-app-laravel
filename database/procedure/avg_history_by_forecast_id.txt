@@ -1,0 +1,22 @@
+CREATE DEFINER=`devapp`@`%` PROCEDURE `forecast`.`avg_history_by_forecast_id`(IN forecast_id INT)
+BEGIN
+	SELECT
+    c.forecast_id,
+    p.start_date,
+    p.end_date,
+    SUM(c.mon)/count(c.forecast_id)  AS mon,
+    SUM(c.tue)/count(c.forecast_id) AS tue,
+    SUM(c.wed)/count(c.forecast_id) AS wed,
+    SUM(c.thu)/count(c.forecast_id) AS thu,
+    SUM(c.fri)/count(c.forecast_id) AS fri,
+    SUM(c.sat)/count(c.forecast_id) AS sat,
+    SUM(c.sun)/count(c.forecast_id) AS sun,
+    (SUM(c.mon) + SUM(c.tue) + SUM(c.wed) + SUM(c.thu) + SUM(c.fri) + SUM(c.sat) + SUM(c.sun))/count(c.forecast_id)AS `sum`,
+    ((SUM(c.mon) + SUM(c.tue) + SUM(c.wed) + SUM(c.thu) + SUM(c.fri) + SUM(c.sat) + SUM(c.sun)) / 7)/ count(c.forecast_id) AS `avg`
+FROM
+    forecast.calculations c
+LEFT JOIN
+    forecast.params p ON p.id = c.forecast_id
+WHERE
+    c.forecast_id = forecast_id;
+END

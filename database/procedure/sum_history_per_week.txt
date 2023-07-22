@@ -1,0 +1,40 @@
+CREATE DEFINER=`devapp`@`%` PROCEDURE `forecast`.`sum_history_per_week`()
+BEGIN
+SELECT
+    rd.id,
+    MIN(DATE_SUB(rd.date, INTERVAL (IF(DAYOFWEEK(rd.date) = 1, 6, DAYOFWEEK(rd.date) - 2)) DAY)) AS start_date,
+    MAX(DATE_SUB(rd.date, INTERVAL (IF(DAYOFWEEK(rd.date) = 1, 0, DAYOFWEEK(rd.date) - 2)) DAY)) AS end_date,
+    mc.name AS site,
+    mp.name AS project,
+    ms.name AS skill,
+    SUM(rd.volume) AS sum_per_week,
+    SUM(rd.volume) / 7 AS avg_per_week,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Monday' THEN rd.volume ELSE 0 END) AS mon,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Tuesday' THEN rd.volume ELSE 0 END) AS tue,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Wednesday' THEN rd.volume ELSE 0 END) AS wed,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Thursday' THEN rd.volume ELSE 0 END) AS thu,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Friday' THEN rd.volume ELSE 0 END) AS fri,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Saturday' THEN rd.volume ELSE 0 END) AS sat,
+    SUM(CASE WHEN DAYNAME(rd.date) = 'Sunday' THEN rd.volume ELSE 0 END) AS sun
+FROM
+    forecast.raw_data rd
+LEFT JOIN
+    forecast.master_cities mc ON mc.id = rd.city_id
+LEFT JOIN
+    forecast.master_projects mp ON mp.id = rd.project_id
+LEFT JOIN
+    forecast.master_skills ms ON ms.id = rd.skill_id
+WHERE
+    rd.deleted_at IS NULL
+GROUP BY
+    WEEK(DATE_SUB(rd.date, INTERVAL (IF(DAYOFWEEK(rd.date) = 1, 6, DAYOFWEEK(rd.date) - 2)) DAY)),
+    mc.name,
+    mp.name,
+    ms.name
+ORDER BY
+    rd.id DESC,
+    WEEK(DATE_SUB(rd.date, INTERVAL (IF(DAYOFWEEK(rd.date) = 1, 6, DAYOFWEEK(rd.date) - 2)) DAY)),
+    mc.name,
+    mp.name,
+    ms.name;
+END
