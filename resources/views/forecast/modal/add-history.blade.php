@@ -10,7 +10,7 @@
             </div>
             <div class="modal-body">
                 <table id="resultsTable" class="table table-striped table-bordered text-center">
-                    <thead>
+                    <thead class="bg-dark text-white">
                         <tr>
                             <th>Site</th>
                             <th>Project</th>
@@ -52,7 +52,7 @@
         // Fetch the query results using AJAX
         $.ajax({
             method: 'POST',
-            url: "{{ url('forecast/data') . '/' . $params->id }}",
+            url: "{{ url('forecast/history/show') . '/' . $params->id }}",
             headers: {
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
@@ -122,7 +122,7 @@
             // Send the selected data for insertion using AJAX
             $.ajax({
                 method: 'POST',
-                url: '{{ route('forecast.calculation') }}',
+                url: '{{ route('forecast.history.store') }}',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },

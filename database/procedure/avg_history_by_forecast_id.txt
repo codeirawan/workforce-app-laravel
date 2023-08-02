@@ -1,22 +1,37 @@
-CREATE DEFINER=`devapp`@`%` PROCEDURE `forecast`.`avg_history_by_forecast_id`(IN forecast_id INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `forecast`.`avg_history_by_forecast_id`(IN forecast_id INT)
 BEGIN
-	SELECT
+SELECT
     c.forecast_id,
     p.start_date,
     p.end_date,
-    SUM(c.mon)/count(c.forecast_id)  AS mon,
-    SUM(c.tue)/count(c.forecast_id) AS tue,
-    SUM(c.wed)/count(c.forecast_id) AS wed,
-    SUM(c.thu)/count(c.forecast_id) AS thu,
-    SUM(c.fri)/count(c.forecast_id) AS fri,
-    SUM(c.sat)/count(c.forecast_id) AS sat,
-    SUM(c.sun)/count(c.forecast_id) AS sun,
-    (SUM(c.mon) + SUM(c.tue) + SUM(c.wed) + SUM(c.thu) + SUM(c.fri) + SUM(c.sat) + SUM(c.sun))/count(c.forecast_id)AS `sum`,
-    ((SUM(c.mon) + SUM(c.tue) + SUM(c.wed) + SUM(c.thu) + SUM(c.fri) + SUM(c.sat) + SUM(c.sun)) / 7)/ count(c.forecast_id) AS `avg`
+    SUM(c.mon) / COUNT(c.forecast_id) + (SUM(c.mon) / COUNT(c.forecast_id) * (a.mon / 100)) AS mon,
+    SUM(c.tue) / COUNT(c.forecast_id) + (SUM(c.tue) / COUNT(c.forecast_id) * (a.tue / 100)) AS tue,
+    SUM(c.wed) / COUNT(c.forecast_id) + (SUM(c.wed) / COUNT(c.forecast_id) * (a.wed / 100)) AS wed,
+    SUM(c.thu) / COUNT(c.forecast_id) + (SUM(c.thu) / COUNT(c.forecast_id) * (a.thu / 100)) AS thu,
+    SUM(c.fri) / COUNT(c.forecast_id) + (SUM(c.fri) / COUNT(c.forecast_id) * (a.fri / 100)) AS fri,
+    SUM(c.sat) / COUNT(c.forecast_id) + (SUM(c.sat) / COUNT(c.forecast_id) * (a.sat / 100)) AS sat,
+    SUM(c.sun) / COUNT(c.forecast_id) + (SUM(c.sun) / COUNT(c.forecast_id) * (a.sun / 100)) AS sun,
+    ((SUM(c.mon) + (SUM(c.mon) / COUNT(c.forecast_id) * (a.mon / 100))) + 
+    (SUM(c.tue) + (SUM(c.tue) / COUNT(c.forecast_id) * (a.tue / 100))) + 
+    (SUM(c.wed) + (SUM(c.wed) / COUNT(c.forecast_id) * (a.wed / 100))) + 
+    (SUM(c.thu) + (SUM(c.thu) / COUNT(c.forecast_id) * (a.thu / 100))) + 
+    (SUM(c.fri) + (SUM(c.fri) / COUNT(c.forecast_id) * (a.fri / 100))) + 
+    (SUM(c.sat) + (SUM(c.sat) / COUNT(c.forecast_id) * (a.sat / 100))) + 
+    (SUM(c.sun) + (SUM(c.sun) / COUNT(c.forecast_id) * (a.sun / 100))))
+    / COUNT(c.forecast_id) AS `sum`,
+    (((SUM(c.mon) + (SUM(c.mon) / COUNT(c.forecast_id) * (a.mon / 100))) + 
+    (SUM(c.tue) + (SUM(c.tue) / COUNT(c.forecast_id) * (a.tue / 100))) + 
+    (SUM(c.wed) + (SUM(c.wed) / COUNT(c.forecast_id) * (a.wed / 100))) + 
+    (SUM(c.thu) + (SUM(c.thu) / COUNT(c.forecast_id) * (a.thu / 100))) + 
+    (SUM(c.fri) + (SUM(c.fri) / COUNT(c.forecast_id) * (a.fri / 100))) + 
+    (SUM(c.sat) + (SUM(c.sat) / COUNT(c.forecast_id) * (a.sat / 100))) + 
+    (SUM(c.sun) + (SUM(c.sun) / COUNT(c.forecast_id) * (a.sun / 100)))) / 7) / count(c.forecast_id) AS `avg`
 FROM
     forecast.calculations c
 LEFT JOIN
     forecast.params p ON p.id = c.forecast_id
+LEFT JOIN
+    forecast.adjustment a ON a.forecast_id = c.forecast_id
 WHERE
     c.forecast_id = forecast_id;
 END

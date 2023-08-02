@@ -61,8 +61,21 @@
                         </div>
                         <div class="form-group col-sm-4">
                             <label for="reporting_period">{{ __('Reporting Period') }}</label>
-                            <input type="number" class="form-control" min="0" id="reporting_period"
-                                name="reporting_period" autocomplete="off" required>
+                            <select class="form-control kt_selectpicker @error('reporting_period') is-invalid @enderror"
+                                id="reporting_period" name="reporting_period" data-live-search="true">
+                                <option value="3600" {{ old('reporting_period') == '3600' ? 'selected' : '' }}>
+                                    {{ __('3600') }}</option>
+                                <option value="1800" {{ old('reporting_period') == '1800' ? 'selected' : '' }}>
+                                    {{ __('1800') }}</option>
+                                <option value="900" {{ old('reporting_period') == '900' ? 'selected' : '' }}>
+                                    {{ __('900') }}</option>
+                            </select>
+
+                            @error('reporting_period')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="form-group col-sm-4">
                             <label for="service_level">{{ __('Service Level') }}</label>
