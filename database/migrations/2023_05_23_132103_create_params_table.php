@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -18,8 +17,9 @@ return new class extends Migration
             $table->char('city_id', 4)->index();
             $table->unsignedBigInteger('project_id')->index();
             $table->unsignedBigInteger('skill_id')->index();
-            $table->date('start_date')->unique();
-            $table->date('end_date')->unique();
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->unsignedTinyInteger('week')->nullable();
             $table->integer('avg_handling_time')->nullable();
             $table->integer('reporting_period')->nullable();
             $table->integer('service_level')->nullable();

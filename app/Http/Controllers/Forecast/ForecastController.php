@@ -89,11 +89,10 @@ class ForecastController extends Controller
         }
 
         $this->validate($request, [
-            // 'city_id' => 'required',
-            // 'project_id' => 'required',
             'skill_id' => 'required',
             'start_date' => 'required',
             'end_date' => 'required',
+            'week' => 'required|in:1,2,3,4,5',
             'avg_handling_time' => 'required|integer',
             'reporting_period' => 'required|integer',
             'service_level' => 'required|integer',
@@ -111,6 +110,7 @@ class ForecastController extends Controller
             $forecast->skill_id = $request->skill_id;
             $forecast->start_date = $request->start_date;
             $forecast->end_date = $request->end_date;
+            $forecast->week = $request->week;
             $forecast->avg_handling_time = $request->avg_handling_time;
             $forecast->reporting_period = $request->reporting_period;
             $forecast->service_level = $request->service_level;
@@ -140,6 +140,7 @@ class ForecastController extends Controller
         }
 
         $params = Params::all()->where('id', '=', $id)->firstOrFail();
+
         $skill = Skill::select(
             'master_cities.name AS site',
             'master_projects.name AS project',
@@ -165,6 +166,7 @@ class ForecastController extends Controller
         }
 
         $params = Params::all()->where('id', '=', $id)->firstOrFail();
+
         $skill = Skill::select(
             'master_cities.name AS site',
             'master_projects.name AS project',
@@ -190,6 +192,7 @@ class ForecastController extends Controller
         $this->validate($request, [
             'start_date' => 'required',
             'end_date' => 'required',
+            'week' => 'required|in:1,2,3,4,5',
             'avg_handling_time' => 'required|integer',
             'reporting_period' => 'required|integer',
             'service_level' => 'required|integer',
@@ -203,6 +206,7 @@ class ForecastController extends Controller
         try {
             $forecast->start_date = $request->start_date;
             $forecast->end_date = $request->end_date;
+            $forecast->week = $request->week;
             $forecast->avg_handling_time = $request->avg_handling_time;
             $forecast->reporting_period = $request->reporting_period;
             $forecast->service_level = $request->service_level;

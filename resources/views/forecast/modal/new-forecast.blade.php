@@ -55,6 +55,28 @@
                             @enderror
                         </div>
                         <div class="form-group col-sm-4">
+                            <label for="week">{{ __('Week') }}</label>
+                            <select class="form-control kt_selectpicker @error('week') is-invalid @enderror"
+                                id="week" name="week" data-live-search="true">
+                                <option value="1" {{ old('week') == '1' ? 'selected' : '' }}>
+                                    {{ __('Week 1') }}</option>
+                                <option value="2" {{ old('week') == '2' ? 'selected' : '' }}>
+                                    {{ __('Week 2') }}</option>
+                                <option value="3" {{ old('week') == '3' ? 'selected' : '' }}>
+                                    {{ __('Week 3') }}</option>
+                                <option value="4" {{ old('week') == '4' ? 'selected' : '' }}>
+                                    {{ __('Week 4') }}</option>
+                                <option value="5" {{ old('week') == '5' ? 'selected' : '' }}>
+                                    {{ __('Week 5') }}</option>
+                            </select>
+
+                            @error('week')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-sm-4">
                             <label for="avg_handling_time">{{ __('Avg Handling Time') }}</label>
                             <input type="number" class="form-control" min="0" id="avg_handling_time"
                                 name="avg_handling_time" autocomplete="off" required>
@@ -89,13 +111,14 @@
                         </div>
                         <div class="form-group col-sm-4">
                             <label for="shrinkage">{{ __('Shrinkage') }}</label>
-                            <input type="number" class="form-control" min="0" id="shrinkage" name="shrinkage"
-                                autocomplete="off" required>
+                            <input type="number" class="form-control" min="0" id="shrinkage"
+                                name="shrinkage" autocomplete="off" required>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">{{ __('Cancel') }}</button>
                     <button type="submit" class="btn btn-primary">{{ __('Submit') }}</button>
                 </div>
             </form>

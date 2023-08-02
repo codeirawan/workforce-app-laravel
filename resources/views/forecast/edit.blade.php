@@ -75,6 +75,28 @@
                                 @enderror
                             </div>
                             <div class="form-group col-sm-4">
+                                <label for="week">{{ __('Week') }}</label>
+                                <select class="form-control kt_selectpicker @error('week') is-invalid @enderror"
+                                    id="week" name="week" data-live-search="true">
+                                    <option value="1" {{ old('week', $params->week) == '1' ? 'selected' : '' }}>
+                                        {{ __('Week 1') }}</option>
+                                    <option value="2" {{ old('week', $params->week) == '2' ? 'selected' : '' }}>
+                                        {{ __('Week 2') }}</option>
+                                    <option value="3" {{ old('week', $params->week) == '3' ? 'selected' : '' }}>
+                                        {{ __('Week 3') }}</option>
+                                    <option value="4" {{ old('week', $params->week) == '4' ? 'selected' : '' }}>
+                                        {{ __('Week 4') }}</option>
+                                    <option value="5" {{ old('week', $params->week) == '5' ? 'selected' : '' }}>
+                                        {{ __('Week 5') }}</option>
+                                </select>
+
+                                @error('week')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-sm-4">
                                 <label for="avg_handling_time">{{ __('Avg Handling Time') }}</label>
                                 <input type="number" class="form-control" min="0" id="avg_handling_time"
                                     name="avg_handling_time" autocomplete="off"
@@ -115,8 +137,9 @@
                             </div>
                             <div class="form-group col-sm-4">
                                 <label for="shrinkage">{{ __('Shrinkage') }}</label>
-                                <input type="number" class="form-control" min="0" id="shrinkage" name="shrinkage"
-                                    autocomplete="off" value="{{ old('shrinkage', $params->shrinkage) }}" required>
+                                <input type="number" class="form-control" min="0" id="shrinkage"
+                                    name="shrinkage" autocomplete="off"
+                                    value="{{ old('shrinkage', $params->shrinkage) }}" required>
                             </div>
                         </div>
                     </div>
