@@ -21,20 +21,21 @@ Route::middleware(['auth', 'verified'])->group(
                 Route::post('/history/weekly/data', 'HistoryDataController@weeklyData')->name('history.weekly.data');
 
                 Route::resource('forecast', 'ForecastController');
-                Route::post('/forecast/params', 'ForecastController@paramsForecast')->name('forecast.params');
-                Route::post('/forecast/data/{id}', 'ForecastController@dataHistory')->name('forecast.data');
-                Route::post('/forecast/history/{id}', 'ForecastController@showHistory')->name('forecast.history');
-                Route::post('/forecast/calculation', 'ForecastController@addCalculation')->name('forecast.calculation');
-                Route::post('/forecast/average/{id}', 'ForecastController@averageHistory')->name('forecast.average');
-                Route::post('/forecast/result/{id}', 'ForecastController@resultForecast')->name('forecast.result');
-                Route::post('/forecast/mon/{id}', 'ForecastController@fteReqMon')->name('forecast.mon');
-                Route::post('/forecast/tue/{id}', 'ForecastController@fteReqTue')->name('forecast.tue');
-                Route::post('/forecast/wed/{id}', 'ForecastController@fteReqWed')->name('forecast.wed');
-                Route::post('/forecast/thu/{id}', 'ForecastController@fteReqThu')->name('forecast.thu');
-                Route::post('/forecast/fri/{id}', 'ForecastController@fteReqFri')->name('forecast.fri');
-                Route::post('/forecast/sat/{id}', 'ForecastController@fteReqSat')->name('forecast.sat');
-                Route::post('/forecast/sun/{id}', 'ForecastController@fteReqSun')->name('forecast.sun');
-
+                Route::post('/forecast/params', 'ForecastController@params')->name('forecast.params');
+                Route::post('/forecast/history/show/{id}', 'ForecastController@showHistory')->name('forecast.history.show');
+                Route::post('/forecast/history/data/{id}', 'ForecastController@dataHistory')->name('forecast.history.data');
+                Route::post('/forecast/history/store', 'ForecastController@storeHistory')->name('forecast.history.store');
+                Route::post('/forecast/history/average/{id}', 'ForecastController@averageHistory')->name('forecast.history.average');
+                Route::delete('/forecast/history/destroy/{id}', 'ForecastController@destroyHistory')->name('forecast.history.destroy');
+                Route::post('/forecast/adjust/data/{id}', 'ForecastController@dataAdjust')->name('forecast.adjust.data');
+                Route::post('/forecast/adjust/update/{id}', 'ForecastController@updateAdjust')->name('forecast.adjust.update');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.mon');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.tue');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.wed');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.thu');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.fri');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.sat');
+                Route::post('/forecast/{day}/{id}', 'ForecastController@fteReqDay')->name('forecast.sun');
             });
         });
 
