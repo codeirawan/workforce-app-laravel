@@ -9,6 +9,7 @@ use App\Models\Forecast\Params;
 use App\Models\Master\City;
 use App\Models\Master\Project;
 use App\Models\Master\Skill;
+use App\Models\Schedule\SchedulePeriod;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -121,6 +122,10 @@ class ForecastController extends Controller
             $adjust = new Adjust;
             $adjust->forecast_id = $forecast->id;
             $adjust->save();
+
+            $schdule = new SchedulePeriod;
+            $schdule->forecast_id = $forecast->id;
+            $schdule->save();
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -333,6 +338,7 @@ class ForecastController extends Controller
 
         }
     }
+    
     public function destroyHistory($id)
     {
         if (!Laratrust::isAbleTo('delete-forecast')) {

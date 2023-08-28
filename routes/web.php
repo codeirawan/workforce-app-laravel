@@ -39,10 +39,11 @@ Route::middleware(['auth', 'verified'])->group(
             });
         });
 
-        Route::namespace('Scheduling')->group(function () {
-            Route::middleware('permission:view-scheduling')->group(function () {
-                Route::resource('scheduling', 'SchedulingController');
-                Route::post('/scheduling/data', 'SchedulingController@data')->name('scheduling.data');
+        Route::namespace('Schedule')->group(function () {
+            Route::middleware('permission:view-schedule')->group(function () {
+                Route::resource('schedule', 'ScheduleController');
+                Route::post('/schedule/data', 'ScheduleController@data')->name('schedule.data');
+                Route::post('/schedule/generate/{id}', 'ScheduleController@generateData')->name('schedule.generate');
 
             });
         });

@@ -79,17 +79,17 @@
                     </li>
                 @endpermission
 
-                @permission(['view-scheduling'])
+                @permission(['view-schedule'])
                     <li class="kt-menu__section ">
-                        <h4 class="kt-menu__section-text">{{ __('Scheduling Management') }}</h4>
+                        <h4 class="kt-menu__section-text">{{ __('Schedule Management') }}</h4>
                         <i class="kt-menu__section-icon flaticon-more-v2"></i>
                     </li>
 
-                    <li class="kt-menu__item @if (Request::is('scheduling*')) kt-menu__item--here @endif"
+                    <li class="kt-menu__item @if (Request::is('schedule*')) kt-menu__item--here @endif"
                         aria-haspopup="true">
-                        <a href="#" class="kt-menu__link">
+                        <a href="{{ route('schedule.index') }}" class="kt-menu__link">
                             <i class="kt-menu__link-icon fa-solid fa-calendar-check"></i>
-                            <span class="kt-menu__link-text">{{ __('Scheduling (Under Construction)') }}</span>
+                            <span class="kt-menu__link-text">{{ __('Schedule') }}</span>
                         </a>
                     </li>
                 @endpermission

@@ -8,7 +8,7 @@ return [
             'leave' => 'v,c,u,d,p,a,r,cl',
             'master' => 'v,c,u,d',
             'forecast' => 'v,c,u,d',
-            'scheduling' => 'v,c,u,d',
+            'schedule' => 'v,c,u,d',
             'report' => 'v,c,u,d',
         ],
     ],
