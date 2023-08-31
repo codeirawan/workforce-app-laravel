@@ -42,7 +42,7 @@ class SkillController extends Controller
         return DataTables::of($skills)
             ->addColumn('action', function ($skill) {
                 $edit = '<a href="' . route('master.skill.edit', $skill->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Edit') . '"><i class="la la-edit"></i></a>';
-                $delete = '<a href="#" data-href="' . route('master.skill.destroy', $skill->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Delete') . '" data-toggle="modal" data-target="#modal-delete" data-key="' . $skill->name . '"><i class="la la-trash"></i></a>';
+                $delete = '<a href="#" data-href="' . route('master.skill.destroy', $skill->id) . '" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" title="' . Lang::get('Delete') . '" data-toggle="modal" data-target="#modal-delete" data-key="' . $skill->skill . '"><i class="la la-trash"></i></a>';
 
                 return (Laratrust::isAbleTo('update-master') ? $edit : '') . (Laratrust::isAbleTo('delete-master') ? $delete : '');
             })
