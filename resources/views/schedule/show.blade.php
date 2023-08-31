@@ -62,16 +62,48 @@
                                 <span class="kt-hidden-mobile">{{ __('Back') }}</span>
                             </a>
                             @if (Laratrust::isAbleTo('create-schedule'))
-                                <form id="generate-form" action="{{ route('schedule.generate', $scheduling->id) }}"
-                                    method="POST" style="display: none;">
-                                    @csrf
-                                </form>
+                                @if ($getSchedules->isEmpty())
+                                    <form id="generate-form" action="{{ route('schedule.generate', $scheduling->id) }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
 
-                                <a href="#" class="btn btn-danger"
-                                    onclick="event.preventDefault(); document.getElementById('generate-form').submit();">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i> {{ __('Generate Schedule') }}
-                                </a>
+                                    <a href="#" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('generate-form').submit();">
+                                        <i class="fa-solid fa-wand-magic-sparkles"></i> {{ __('Generate Schedule') }}
+                                    </a>
+                                @else
+                                    @php
+                                        $hasUnpublishedSchedule = false;
+                                    @endphp
+
+                                    @foreach ($getSchedules as $schedule)
+                                        @if ($schedule->publish === 0)
+                                            @php
+                                                $hasUnpublishedSchedule = true;
+                                            @endphp
+                                            @break
+                                        @endif
+                                    @endforeach
+
+                                    @if ($hasUnpublishedSchedule)
+                                        <form id="publish-form" action="{{ route('schedule.publish', $scheduling->id) }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+
+                                        <a href="#" class="btn btn-success" onclick="event.preventDefault(); document.getElementById('publish-form').submit();">
+                                            <i class="fa-solid fa-paper-plane"></i> {{ __('Publish Schedule') }}
+                                        </a>
+                                    @else
+                                        <form id="unpublish-form" action="{{ route('schedule.unpublish', $scheduling->id) }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
+
+                                        <a href="#" class="btn btn-warning" onclick="event.preventDefault(); document.getElementById('unpublish-form').submit();">
+                                            <i class="fa-solid fa-ban"></i> {{ __('Unpublish Schedule') }}
+                                        </a>
+                                    @endif
+                                @endif
                             @endif
+
                         </div>
                     </div>
                     <div class="kt-portlet__body">
@@ -201,7 +233,13 @@
                                                             <td class="{{ $colorClass }}"></td>
                                                         @endfor
                                                     @endfor
-                                                    <td></td>
+                                                    <td>
+                                                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" 
+                                                            title="{{ Lang::get('Swap') }}"
+                                                            data-toggle="modal" data-target="#swapModal{{ $schedule->schedule_shift }}">
+                                                            <i class="fa-solid fa-shuffle"></i>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -361,6 +399,39 @@
             </div>
         </div>
     </div>
+    @foreach ($getSchedules as $schedule)
+        <div class="modal fade" id="swapModal{{ $schedule->schedule_shift }}" tabindex="-1" role="dialog" aria-labelledby="swapModalLabel{{ $schedule->schedule_shift }}" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form action="{{ route('schedule.swap', ['id' => $schedule->schedule_shift]) }}" method="POST" id="swapSchedule" name="swapSchedule">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="swapModalLabel{{ $schedule->schedule_shift }}">Swap Shift</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Agent Name: <span id="modalAgentName">{{ $schedule->name }}</span></p>
+                            <p>Date: <span id="modalCurrentDate">{{ date('D, d M Y', strtotime($schedule->date)) }}</span></p>
+                            <p>Current Shift: <span id="modalCurrentShift">{{ $schedule->shift }}</span></p>
+                            <p>Choose Shift to Swap:</p>
+                            <select class="form-control kt_selectpicker" id="swap" name="swap" data-live-search="true">
+                            @foreach ($shifts as $shift)
+                                <option value="{{ $shift->id }}">{{ $shift->name }} ({{ date('H:i', strtotime($shift->start_time)) }}-{{ date('H:i', strtotime($shift->end_time)) }})</option>
+                            @endforeach
+                        </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
+                            <button type="submit" class="btn btn-warning" id="btn-submit">{{ __('Submit') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
     <style>
         .shift-assigned {
             background-color: #1dc9b7;
@@ -383,4 +454,11 @@
     <script src="{{ asset(mix('js/datatable.js')) }}"></script>
     <script src="{{ asset(mix('js/tooltip.js')) }}"></script>
     <script src="{{ asset(mix('js/form/validation.js')) }}"></script>
+    <script type="text/javascript">
+        $('.kt_selectpicker').selectpicker({
+            noneResultsText: "{{ __('No matching results for') }} {0}"
+        });
+
+        $('.btn-tooltip').tooltip();
+    </script>
 @endsection

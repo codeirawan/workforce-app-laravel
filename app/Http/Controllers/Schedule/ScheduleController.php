@@ -186,9 +186,13 @@ class ScheduleController extends Controller
             'schedule_shift.date',
             'schedule_shift.start_time',
             'schedule_shift.end_time',
+            'schedule_shift.id AS schedule_shift',
+            'schedule_period.id AS schedule_period',
+            'schedule_period.publish',
         )
             ->leftJoin('users', 'users.id', '=', 'schedule_shift.agent_id')
             ->leftJoin('master_shift', 'master_shift.id', '=', 'schedule_shift.shift_id')
+            ->leftJoin('schedule_period', 'schedule_period.id', '=', 'schedule_shift.schedule_id')
             ->groupBy(
                 'users.nik',
                 'users.name',
@@ -198,16 +202,19 @@ class ScheduleController extends Controller
                 'schedule_shift.date',
                 'schedule_shift.start_time',
                 'schedule_shift.end_time',
+                'schedule_shift.id',
+                'schedule_period.id',
+                'schedule_period.publish',
             )
+            ->where('schedule_period.id', $id)
             ->orderBy('schedule_shift.date')
             ->orderBy('schedule_shift.start_time')
             ->get();
-
-        // dd($getSchedules);
+            
         return view('schedule.show', compact('scheduling', 'shifts', 'availableAgents', 'forecastDataAllDays', 'daysOfWeek', 'getSchedules'));
     }
 
-    public function generateData($id)
+    public function generate($id)
     {
         $scheduling = SchedulePeriod::select(
             'schedule_period.id',
@@ -431,5 +438,56 @@ class ScheduleController extends Controller
     private function hasAssignedShiftOnSameDate($agent, $date)
     {
         return $agent->shifts()->where('date', $date)->exists();
+    }
+
+    public function publish($id)
+    {
+        if (!Laratrust::isAbleTo('update-schedule')) {
+            return abort(404);
+        }
+
+        $schedule = SchedulePeriod::findOrFail($id);
+        $schedule->publish = 1;
+        $schedule->save();
+
+        return redirect()->route('schedule.show', $id)->with('status', 'Publish schedule successfully.');
+    }
+
+    public function unpublish($id)
+    {
+        if (!Laratrust::isAbleTo('update-schedule')) {
+            return abort(404);
+        }
+
+        $schedule = SchedulePeriod::findOrFail($id);
+        $schedule->publish = 0;
+        $schedule->save();
+
+        return redirect()->route('schedule.show', $id)->with('status', 'Unpublish schedule successfully.');
+    }
+
+    public function swap($id, Request $request)
+    {
+        if (!Laratrust::isAbleTo('update-schedule')) {
+            return abort(404);
+        }
+
+        $shift = ShiftSkill::select(
+            'master_shift.id',
+            'master_shift.name',
+            'master_shift.start_time',
+            'master_shift.end_time'
+        )
+            ->where('master_shift.id', '=', $request->swap)
+            ->leftJoin('master_shift', 'master_shift.id', '=', 'shift_skills.shift_id')
+            ->first();
+        
+        $schedule = ScheduleShift::findOrFail($id);
+        $schedule->shift_id = $shift->id;
+        $schedule->start_time = $shift->start_time;
+        $schedule->end_time = $shift->end_time;
+        $schedule->save();
+
+        return back()->with('status', 'Swap shift successfully.');
     }
 }
