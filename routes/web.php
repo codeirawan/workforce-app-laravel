@@ -43,7 +43,11 @@ Route::middleware(['auth', 'verified'])->group(
             Route::middleware('permission:view-schedule')->group(function () {
                 Route::resource('schedule', 'ScheduleController');
                 Route::post('/schedule/data', 'ScheduleController@data')->name('schedule.data');
-                Route::post('/schedule/generate/{id}', 'ScheduleController@generateData')->name('schedule.generate');
+                Route::post('/schedule/generate/{id}', 'ScheduleController@generate')->name('schedule.generate');
+                Route::post('/schedule/generate/{id}', 'ScheduleController@generate')->name('schedule.generate');
+                Route::post('/schedule/publish/{id}', 'ScheduleController@publish')->name('schedule.publish');
+                Route::post('/schedule/unpublish/{id}', 'ScheduleController@unpublish')->name('schedule.unpublish');
+                Route::post('/schedule/swap/{id}', 'ScheduleController@swap')->name('schedule.swap');
 
             });
         });
