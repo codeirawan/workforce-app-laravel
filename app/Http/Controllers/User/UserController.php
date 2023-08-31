@@ -224,7 +224,7 @@ class UserController extends Controller
         }
         DB::commit();
 
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
 
         $message = Lang::get('User') . ' \'' . $user->email . '\' ' . Lang::get('successfully created.');
         return redirect()->route('user.index')->with('status', $message);
