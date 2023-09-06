@@ -210,7 +210,7 @@ class ScheduleController extends Controller
             ->orderBy('schedule_shift.date')
             ->orderBy('schedule_shift.start_time')
             ->get();
-            
+
         return view('schedule.show', compact('scheduling', 'shifts', 'availableAgents', 'forecastDataAllDays', 'daysOfWeek', 'getSchedules'));
     }
 
@@ -395,10 +395,8 @@ class ScheduleController extends Controller
                 $hourRange = sprintf("%02d", $hour) . ':00 - ' . sprintf("%02d", $hour + 1) . ':00';
                 $totalAgentsNeeded += $forecastedCallResults[$hourRange];
 
-                // Filter available agents who are not already assigned to shifts during this time
                 $availableAgentsForShift = $availableAgents->reject(function ($agent) use ($shift, $date) {
-                    return $agent->hasAssignedShiftDuring($shift->start_time, $shift->end_time, $date)
-                        || $this->hasAssignedShiftOnSameDate($agent, $date);
+                    return $agent->hasAssignedShiftDuring($shift->start_time, $shift->end_time, $date) || $this->hasAssignedShiftOnSameDate($agent, $date);
                 });
 
                 $assignedAgentsForHour = $availableAgentsForShift->take(min($forecastedCallResults[$hourRange], count($availableAgentsForShift)));
@@ -413,10 +411,8 @@ class ScheduleController extends Controller
             foreach ($availableAgents as $agent) {
                 $user = User::where('name', $agent->name)->first();
 
-                if (
-                    !$agent->hasAssignedShiftDuring($shift->start_time, $shift->end_time, $date)
-                    && !$this->hasAssignedShiftOnSameDate($agent, $date)
-                ) {
+                if ($agent->gender === 'Male' && $shift->start_time > '15:00:00' && !$agent->hasAssignedShiftDuring($shift->start_time, $shift->end_time, $date) && !$this->hasAssignedShiftOnSameDate($agent, $date)) {
+                    // Assign male agents to afternoon shifts
                     ScheduleShift::create([
                         'schedule_id' => $id,
                         'agent_id' => $user->id,
@@ -427,6 +423,23 @@ class ScheduleController extends Controller
                     ]);
 
                     $totalAgentsNeeded--;
+
+                    if ($totalAgentsNeeded <= 0) {
+                        break;
+                    }
+                } elseif ($agent->gender === 'Female' && $shift->start_time < '15:00:00' && !$agent->hasAssignedShiftDuring($shift->start_time, $shift->end_time, $date) && !$this->hasAssignedShiftOnSameDate($agent, $date)) {
+                    // Assign female agents to morning shifts
+                    ScheduleShift::create([
+                        'schedule_id' => $id,
+                        'agent_id' => $user->id,
+                        'date' => $date,
+                        'shift_id' => $shift->id,
+                        'start_time' => $shift->start_time,
+                        'end_time' => $shift->end_time,
+                    ]);
+
+                    $totalAgentsNeeded--;
+
                     if ($totalAgentsNeeded <= 0) {
                         break;
                     }
@@ -481,7 +494,7 @@ class ScheduleController extends Controller
             ->where('master_shift.id', '=', $request->swap)
             ->leftJoin('master_shift', 'master_shift.id', '=', 'shift_skills.shift_id')
             ->first();
-        
+
         $schedule = ScheduleShift::findOrFail($id);
         $schedule->shift_id = $shift->id;
         $schedule->start_time = $shift->start_time;
