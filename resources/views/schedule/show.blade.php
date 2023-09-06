@@ -109,12 +109,15 @@
                     <div class="kt-portlet__body">
                         <div class="kt-portlet__content">
                             @include('layouts.inc.alert')
-                            <div class="card card-custom gutter-b mb-4">
-                                <div class="bg-secondary text-dark">
-                                    <div class="card-title">
-                                        <h6 class="card-label mt-2 ml-4 p-2">
-                                            Generate Schedule
-                                        </h6>
+                            <div class="card card-custom gutter-b">
+                                <div class="form-group mb-0">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                            </span>
+                                        </div>
+                                        <input type="text" class="form-control" id="filter" placeholder="Search agent name...">
                                     </div>
                                 </div>
 
@@ -159,7 +162,7 @@
                                                     $scheduleStartHour = (int) substr($schedule->start_time, 0, 2);
                                                     $scheduleEndHour = (int) substr($schedule->end_time, 0, 2);
                                                 @endphp
-                                                <tr class="schedule-row">
+                                                <tr class="schedule-row" data-filter="{{ $schedule->nik }} {{ $schedule->name }} {{ $schedule->gender }} {{ $schedule->religion }}">
                                                     <td>{{ $schedule->nik }}</td>
                                                     <td>{{ $schedule->name }}</td>
                                                     <td>
@@ -170,36 +173,6 @@
                                                         @endif
                                                     </td>
                                                     <td>{{ $schedule->religion }}</td>
-                                                    {{-- <td>
-                                                        @php
-                                                            $dayOfWeek = date('D', strtotime($schedule->date));
-                                                            $badgeClass = '';
-                                                            switch ($dayOfWeek) {
-                                                                case 'Mon':
-                                                                    $badgeClass = 'badge-primary';
-                                                                    break;
-                                                                case 'Tue':
-                                                                    $badgeClass = 'badge-success';
-                                                                    break;
-                                                                case 'Wed':
-                                                                    $badgeClass = 'badge-info';
-                                                                    break;
-                                                                case 'Thu':
-                                                                    $badgeClass = 'badge-warning';
-                                                                    break;
-                                                                case 'Fri':
-                                                                    $badgeClass = 'badge-danger';
-                                                                    break;
-                                                                case 'Sat':
-                                                                    $badgeClass = 'badge-dark';
-                                                                    break;
-                                                                case 'Sun':
-                                                                    $badgeClass = 'badge-secondary';
-                                                                    break;
-                                                            }
-                                                        @endphp
-                                                        <span class="badge {{ $badgeClass }}">{{ $dayOfWeek }}</span>
-                                                    </td> --}}
                                                     <td>{{ date('D', strtotime($schedule->date)) }}</td>
                                                     <td>{{ date('d-m-y', strtotime($schedule->date)) }}</td>
                                                     <td>{{ $schedule->shift }}</td>
@@ -461,4 +434,27 @@
 
         $('.btn-tooltip').tooltip();
     </script>
+    <script>
+    // Get the input element
+    const filterInput = document.getElementById('filter');
+
+    // Get all rows in the table
+    const rows = document.querySelectorAll('.schedule-row');
+
+    // Add an event listener to the input field
+    filterInput.addEventListener('input', function () {
+        const filterText = this.value.toLowerCase();
+
+        // Loop through rows and hide those that don't match the filter text
+        rows.forEach(row => {
+            const rowData = row.getAttribute('data-filter').toLowerCase();
+            if (rowData.includes(filterText)) {
+                row.style.display = ''; // Show the row
+            } else {
+                row.style.display = 'none'; // Hide the row
+            }
+        });
+    });
+</script>
+
 @endsection
