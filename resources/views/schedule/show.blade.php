@@ -135,7 +135,7 @@
                                                 <th>Start</th>
                                                 <th>End</th>
                                                 <!-- Loop through intervals -->
-                                                @for ($hour = 6; $hour < 29; $hour++)
+                                                @for ($hour = 6; $hour < 31; $hour++)
                                                     @for ($minute = 0; $minute < 60; $minute += 60)
                                                         @php
                                                             $formattedHour = sprintf('%02d', $hour % 24);
@@ -179,25 +179,68 @@
                                                     <td>{{ date('H:i', strtotime($schedule->start_time)) }}</td>
                                                     <td>{{ date('H:i', strtotime($schedule->end_time)) }}</td>
                                                     <!-- Loop through intervals and apply color range -->
-                                                    @for ($hour = 6; $hour < 29; $hour++)
+                                                    @for ($hour = 6; $hour < 31; $hour++)
                                                         @for ($minute = 0; $minute < 60; $minute += 15)
                                                             @php
                                                                 $formattedHour = sprintf('%02d', $hour % 24);
                                                                 $formattedMinute = sprintf('%02d', $minute);
                                                                 $currentTime = "$formattedHour:$formattedMinute:00";
-                                                                $colorClass = $currentTime >= $schedule->start_time && $currentTime < $schedule->end_time ? 'shift-assigned' : 'shift-not-assigned';
-                                                                
+                                                                $isShiftAcrossMidnight = $schedule->start_time > $schedule->end_time;
+
+                                                                if ($isShiftAcrossMidnight) {
+                                                                    // Shift does not cross midnight
+                                                                    if ($hour === 6) {
+                                                                        $colorClass = 'shift-not-assigned';
+                                                                    } else {
+                                                                        // Shift crosses midnight
+                                                                    $colorClass = ($currentTime >= $schedule->start_time || $currentTime < $schedule->end_time) ? 'shift-assigned' : 'shift-not-assigned';
+                                                                    }
+                                                                } elseif (!$isShiftAcrossMidnight && $hour === 30) {
+                                                                    $colorClass = 'shift-not-assigned';
+                                                                } else {
+                                                                    $colorClass = $currentTime >= $schedule->start_time && $currentTime < $schedule->end_time ? 'shift-assigned' : 'shift-not-assigned';
+                                                                }
+                                            
                                                                 // Calculate the time since the start of the shift in minutes
                                                                 $timeSinceStartMinutes = ($hour - $scheduleStartHour) * 60 + $minute;
-                                                                
+
                                                                 // Check if it's time for a break
                                                                 $isTimeForBreak = $timeSinceStartMinutes >= 180 && $timeSinceStartMinutes < 210;
 
                                                                 // Calculate time until shift ends in minutes
                                                                 $scheduleEndHour = (int) substr($schedule->end_time, 0, 2);
                                                                 $scheduleEndMinute = (int) substr($schedule->end_time, 3, 2);
-                                                                $timeUntilShiftEndsMinutes = $scheduleEndHour * 60 + $scheduleEndMinute - ($hour * 60 + $minute);
-                                                                $isTimeForSecondBreak = $timeUntilShiftEndsMinutes <= 120 && $timeUntilShiftEndsMinutes > 90;
+
+                                                                // Calculate the difference in hours between $scheduleEndHour and $hour
+                                                                $hourDiff = $scheduleEndHour - $hour;
+
+                                                                // If the hour difference is negative, add 24 hours
+                                                                if ($hourDiff < 0) {
+                                                                    $hourDiff += 24;
+                                                                }
+
+                                                                // Calculate the difference in minutes between $scheduleEndMinute and $minute
+                                                                $minuteDiff = $scheduleEndMinute - $minute;
+
+                                                                // If the minute difference is negative, add 60 minutes and subtract 1 hour
+                                                                if ($minuteDiff < 0) {
+                                                                    $minuteDiff += 60;
+                                                                    $hourDiff--;
+                                                                }
+
+                                                                // Calculate the total minutes until the shift ends
+                                                                $timeUntilShiftEndsMinutes = $hourDiff * 60 + $minuteDiff;
+
+                                                                // Check if it's time for a break
+                                                                $isTimeForBreak = $timeSinceStartMinutes >= 180 && $timeSinceStartMinutes < 210;
+
+                                                                // Check if the duration of the shift is less than or equal to 5 hours before considering the second break
+                                                                if ($hourDiff * 60 + $minuteDiff == 300) {
+                                                                    $isTimeForSecondBreak = false; // No second break for shifts <= 5 hours
+                                                                } else {
+                                                                    // For shifts longer than 5 hours, you can continue with the original second break check
+                                                                    $isTimeForSecondBreak = $timeUntilShiftEndsMinutes <= 120 && $timeUntilShiftEndsMinutes > 100;
+                                                                }
 
                                                                 if ($isTimeForBreak || $isTimeForSecondBreak) {
                                                                     $colorClass .= ' break-flag';
@@ -206,6 +249,7 @@
                                                             <td class="{{ $colorClass }}"></td>
                                                         @endfor
                                                     @endfor
+
                                                     <td>
                                                         <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md btn-tooltip" 
                                                             title="{{ Lang::get('Swap') }}"
