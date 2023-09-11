@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class BulkUserImport implements ToModel, WithHeadingRow
 {
     private $errors = [];
-    
+
     public function model(array $row)
     {
         $request = request()->all();
@@ -119,7 +119,7 @@ class BulkUserImport implements ToModel, WithHeadingRow
         }
         DB::commit();
 
-        $user->sendEmailVerificationNotification();
+        // $user->sendEmailVerificationNotification();
     }
 
     private function getTeamLeaderId($teamLeaderName)
